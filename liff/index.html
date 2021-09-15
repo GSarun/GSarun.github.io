@@ -12,14 +12,12 @@
   </head>
 
   <body>
-   
-    
-    <p id="userId" style="display:none"></p>
+    <p id="userId" style="display: none"></p>
 
     <div class="container">
       <div class="row">
         <div class="col"><img id="pictureUrl" /></div>
-        <div class="col"  id="displayName">ยินดีต้อนรับ คุณ </div>
+        <div class="col" id="displayName">ยินดีต้อนรับ คุณ</div>
         <div class="col">Column</div>
       </div>
     </div>
@@ -106,9 +104,12 @@
       async function main() {
         //alert("LINE Developers x Skooldio")
         await liff.init({ liffId: "1656426131-rq8pBYd2" });
-        document.getElementById("isLoggedIn").append(liff.isLoggedIn())
+        document.getElementById("isLoggedIn").append(liff.isLoggedIn());
+        if (liff.isLoggedIn()) {
+          getUserProfile();
+        }
         // getEnvironment()
-        getUserProfile();
+
         // getContext()
         // getFriendship()
         // createUniversalLink()
