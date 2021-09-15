@@ -1,28 +1,27 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
-    />
-    <title>Giffy Lotto จองเลขผ่านไลน์</title>
 
-    <link rel="stylesheet" href="css/style.css" media="all" />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+    content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" />
+  <title>Giffy Lotto จองเลขผ่านไลน์</title>
 
-  <body>
-    <p id="userId" style="display: none"></p>
+  <link rel="stylesheet" href="css/style.css" media="all" />
+</head>
 
-    <div class="container">
-      <div class="row">
-        <div class="col"><img id="pictureUrl" /></div>
-        <div class="col" id="displayName">ยินดีต้อนรับ คุณ</div>
-        <div class="col">Column</div>
-      </div>
+<body>
+  <p id="userId" style="display: none"></p>
+
+  <div class="container">
+    <div class="row">
+      <div class="col"><img id="pictureUrl" /></div>
+      <div class="col" id="displayName">ยินดีต้อนรับ คุณ</div>
+      <div class="col">Column</div>
     </div>
- <p id="os"><b>OS:</b> </p>
-    <!--
+  </div>
+  <p id="os"><b>OS:</b> </p>
+  <!--
  
   <p id="language"><b>Language:</b> </p>
   <p id="version"><b>Version:</b> </p>
@@ -50,88 +49,90 @@
   <button id="btnScanCode" onclick="scanCode()">Scan Code</button>
   <button id="btnLogOut" onclick="logOut()">Log Out</button>
     -->
-    <p id="isLoggedIn"><b></b></p>
-    <button id="btnClose" onclick="closed()">ปิด</button>
-    <button id="btnLogOut" onclick="logOut()">ออกจากระบบ</button>
+  <p id="isLoggedIn"><b></b></p>
+  <button id="btnClose" onclick="closed()">ปิด</button>
+  <button id="btnLogOut" onclick="logOut()">ออกจากระบบ</button>
 
-    <!-- <script src="js/vconsole.min.js"></script> -->
-    <!-- <script>
+  <!-- <script src="js/vconsole.min.js"></script> -->
+  <!-- <script>
     var vConsole = new VConsole()
     console.log("Hello World!")
   </script> -->
 
-    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-    <script>
-      function createUniversalLink() {}
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script>
+    function createUniversalLink() { }
 
-      async function shareMsg() {}
+    async function shareMsg() { }
 
-      function logOut() {
-        liff.logout();
-        window.location.reload();
+    function logOut() {
+      liff.logout();
+      window.location.reload();
+    }
+
+    function closed() {
+      liff.closeWindow();
+    }
+
+    async function scanCode() { }
+
+    function openWindow() { }
+
+    async function getFriendship() { }
+
+    async function sendMsg() {
+      if (liff.getContext().type != "none") {
+      }
+    }
+
+    function getContext() { }
+
+    async function getUserProfile() {
+      const profile = await liff.getProfile();
+      document.getElementById("pictureUrl").src = profile.pictureUrl;
+      document.getElementById("userId").append(profile.userId);
+      document.getElementById("displayName").append(profile.displayName);
+    }
+
+    function getEnvironment() {
+      document.getElementById("os").append(liff.getOS())
+      //document.getElementById("isInClient").append(liff.isInClient())
+    }
+
+    async function main() {
+      //alert("LINE Developers x Skooldio")
+      await liff.init({ liffId: "1656426131-rq8pBYd2" });
+      document.getElementById("isLoggedIn").append(liff.isLoggedIn());
+      if (liff.isLoggedIn()) {
+        getEnvironment()
+        getUserProfile();
+      } else {
+        liff.login();
       }
 
-      function closed() {
-        liff.closeWindow();
-      }
 
-      async function scanCode() {}
+      // getContext()
+      // getFriendship()
+      // createUniversalLink()
+    }
+    main();
+  </script>
 
-      function openWindow() {}
+  <!-- JavaScript Libraries -->
+  <script src="../lib/jquery/jquery.min.js"></script>
+  <script src="../lib/jquery/jquery-migrate.min.js"></script>
+  <script src="../lib/popper/popper.min.js"></script>
+  <script src="../lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="../lib/easing/easing.min.js"></script>
+  <script src="../lib/counterup/jquery.waypoints.min.js"></script>
+  <script src="../lib/counterup/jquery.counterup.js"></script>
+  <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
+  <script src="../lib/lightbox/js/lightbox.min.js"></script>
+  <script src="../lib/typed/typed.min.js"></script>
+  <!-- Contact Form JavaScript File -->
+  <script src="../contactform/contactform.js"></script>
+  <!-- Template Main Javascript File -->
+  <script src="../js/main.js"></script>
+</body>
 
-      async function getFriendship() {}
-
-      async function sendMsg() {
-        if (liff.getContext().type != "none") {
-        }
-      }
-
-      function getContext() {}
-
-      async function getUserProfile() {
-        const profile = await liff.getProfile();
-        document.getElementById("pictureUrl").src = profile.pictureUrl;
-        document.getElementById("userId").append(profile.userId);
-        document.getElementById("displayName").append(profile.displayName);
-      }
-
-      function getEnvironment() {
-        document.getElementById("os").append(liff.getOS())
-        //document.getElementById("isInClient").append(liff.isInClient())
-      }
-
-      async function main() {
-        //alert("LINE Developers x Skooldio")
-        await liff.init({ liffId: "1656426131-rq8pBYd2" });
-        document.getElementById("isLoggedIn").append(liff.isLoggedIn());
-        if (liff.isLoggedIn()) {
-          getUserProfile();
-        } else {
-          liff.login();
-        }
-        // getEnvironment()
-
-        // getContext()
-        // getFriendship()
-        // createUniversalLink()
-      }
-      main();
-    </script>
-
-    <!-- JavaScript Libraries -->
-    <script src="../lib/jquery/jquery.min.js"></script>
-    <script src="../lib/jquery/jquery-migrate.min.js"></script>
-    <script src="../lib/popper/popper.min.js"></script>
-    <script src="../lib/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../lib/easing/easing.min.js"></script>
-    <script src="../lib/counterup/jquery.waypoints.min.js"></script>
-    <script src="../lib/counterup/jquery.counterup.js"></script>
-    <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="../lib/lightbox/js/lightbox.min.js"></script>
-    <script src="../lib/typed/typed.min.js"></script>
-    <!-- Contact Form JavaScript File -->
-    <script src="../contactform/contactform.js"></script>
-    <!-- Template Main Javascript File -->
-    <script src="../js/main.js"></script>
-  </body>
 </html>
