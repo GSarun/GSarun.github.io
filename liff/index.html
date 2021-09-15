@@ -54,8 +54,9 @@
   <button id="btnScanCode" onclick="scanCode()">Scan Code</button>
   <button id="btnLogOut" onclick="logOut()">Log Out</button>
     -->
-  <p id="isLoggedIn"><b>isLoggedIn:</b></p>
+  <p id="isLoggedIn"><b></b></p>
   <button id="btnClose" onclick="closed()">ปิด</button>
+  <button id="btnLogOut" onclick="logOut()">ออกจากระบบ</button>
 
   <!-- <script src="js/vconsole.min.js"></script> -->
   <!-- <script>
@@ -69,7 +70,10 @@
 
     async function shareMsg() { }
 
-    function logOut() { }
+    function logOut() {
+      liff.logOut()
+      window.location.reload
+     }
 
     function closed() {
       liff.closeWindow();
