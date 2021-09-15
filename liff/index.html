@@ -1,21 +1,30 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover">
-  <title>Giffy Lotto จองเลขผ่านไลน์</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+    />
+    <title>Giffy Lotto จองเลขผ่านไลน์</title>
 
+    <link rel="stylesheet" href="css/style.css" media="all" />
+  </head>
 
-  <link rel="stylesheet" href="css/style.css" media="all">
-</head>
-<body>
+  <body>
+   
+    
+    <p id="userId" style="display:none"></p>
 
-<img id="pictureUrl">
-<p id="displayName">ยินดีต้อนรับ คุณ</p>
-<p id="userId"></p>
+    <div class="container">
+      <div class="row">
+        <div class="col"><img id="pictureUrl" /></div>
+        <div class="col">ยินดีต้อนรับ คุณ <h6 id="displayName"></h6></div>
+        <div class="col">Column</div>
+      </div>
+    </div>
 
-
-  <!--
+    <!--
   <p id="os"><b>OS:</b> </p>
   <p id="language"><b>Language:</b> </p>
   <p id="version"><b>Version:</b> </p>
@@ -37,7 +46,7 @@
   <p id="groupId"><b>groupId:</b> </p>
   <p id="friendship"><b>isFriendship:</b> </p>
   <p id="scanCode"><b>Code:</b> </p>
-  <p id="isLoggedIn"><b>isLoggedIn:</b> </p>
+ 
   <p id="universalLink1"><b>Universal Link:</b> </p>
   <p id="universalLink2"><b>Universal Link with Query params:</b> </p>
   <p><a href="liff/path/?param=9">Link to Path</a></p>
@@ -48,73 +57,64 @@
   <button id="btnScanCode" onclick="scanCode()">Scan Code</button>
   <button id="btnLogOut" onclick="logOut()">Log Out</button>
     -->
-  <button id="btnClose" onclick="closed()">Close</button>
+    <p id="isLoggedIn"><b>isLoggedIn:</b></p>
+    <button id="btnClose" onclick="closed()">ปิด</button>
 
-  <!-- <script src="js/vconsole.min.js"></script> -->
-  <!-- <script>
+    <!-- <script src="js/vconsole.min.js"></script> -->
+    <!-- <script>
     var vConsole = new VConsole()
     console.log("Hello World!")
   </script> -->
 
-  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script> 
-  <script>
-    function createUniversalLink() {
-    }
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script>
+      function createUniversalLink() {}
 
-    async function shareMsg() {
-    }
+      async function shareMsg() {}
 
-    function logOut() {
-    }
+      function logOut() {}
 
-    function closed() {
-      liff.closeWindow()
-    }
-
-    async function scanCode() {
-    }
-
-    function openWindow() {
-    }
-
-    async function getFriendship() {
-    }
-
-    async function sendMsg() {
-      if(liff.getContext().type != "none") {
+      function closed() {
+        liff.closeWindow();
       }
-    }
 
-    function getContext() {
-    }
+      async function scanCode() {}
 
-    async function getUserProfile() {
-        const profile = await liff.getProfile()
-        document.getElementById("pictureUrl").src = profile.pictureUrl
-        document.getElementById("userId").append(profile.userId)
-        document.getElementById("displayName").append(profile.displayName)
+      function openWindow() {}
 
-    }
+      async function getFriendship() {}
 
-    function getEnvironment() {
-      //document.getElementById("os").append(liff.getOS())
-      //document.getElementById("isInClient").append(liff.isInClient())
+      async function sendMsg() {
+        if (liff.getContext().type != "none") {
+        }
+      }
 
-    }
+      function getContext() {}
 
-    async function main() {
-      //alert("LINE Developers x Skooldio")
-      await liff.init({ liffId: "1656426131-rq8pBYd2" })
-      // getEnvironment()
-      getUserProfile()
-      // getContext()
-      // getFriendship()
-      // createUniversalLink()
-    }
-    main()
-  </script>
+      async function getUserProfile() {
+        const profile = await liff.getProfile();
+        document.getElementById("pictureUrl").src = profile.pictureUrl;
+        document.getElementById("userId").append(profile.userId);
+        document.getElementById("displayName").append(profile.displayName);
+      }
 
+      function getEnvironment() {
+        //document.getElementById("os").append(liff.getOS())
+        //document.getElementById("isInClient").append(liff.isInClient())
+      }
 
+      async function main() {
+        //alert("LINE Developers x Skooldio")
+        await liff.init({ liffId: "1656426131-rq8pBYd2" });
+        document.getElementById("isLoggedIn");
+        // getEnvironment()
+        getUserProfile();
+        // getContext()
+        // getFriendship()
+        // createUniversalLink()
+      }
+      main();
+    </script>
 
     <!-- JavaScript Libraries -->
     <script src="../lib/jquery/jquery.min.js"></script>
@@ -131,5 +131,5 @@
     <script src="../contactform/contactform.js"></script>
     <!-- Template Main Javascript File -->
     <script src="../js/main.js"></script>
-</body>
+  </body>
 </html>
