@@ -7,10 +7,10 @@
   <link rel="stylesheet" href="css/style.css" media="all">
 </head>
 <body>
-ยินดีต้องรับ 
+ยินดีต้อนรับ 
 <img id="pictureUrl">
-<p id="userId"></p>
-<p id="displayName"> </p>
+<p id="displayName">คุณ  </p>
+<p id="userId">  </p>
 
 
   <!--
@@ -85,8 +85,8 @@
     async function getUserProfile() {
         const profile = await liff.getProfile()
         document.getElementById("pictureUrl").src = profile.pictureUrl
-        document.getElementById("userId").append(profile.getUserId())
-        document.getElementById("displayName").append(profile.getDisplayName())
+        document.getElementById("userId").append(profile.userId())
+        document.getElementById("displayName").append(profile.displayName())
 
     }
 
