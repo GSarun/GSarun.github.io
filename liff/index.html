@@ -106,7 +106,7 @@
       async function main() {
         //alert("LINE Developers x Skooldio")
         await liff.init({ liffId: "1656426131-rq8pBYd2" });
-        document.getElementById("isLoggedIn");
+        document.getElementById("isLoggedIn").append(liff.isLoggedIn())
         // getEnvironment()
         getUserProfile();
         // getContext()
