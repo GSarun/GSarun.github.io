@@ -8,7 +8,7 @@ const editModal = document.querySelector('.edit-modal');
 const editModalForm = document.querySelector('.edit-modal .form');
 
 const btnAdd = document.querySelector('.btn-add');
-
+const btnClose1 = document.querySelector('.btn-Close1');
 const tableUsers = document.querySelector('.table-users');
 
 let id;
@@ -20,11 +20,11 @@ const renderUser = doc => {
       <td>${doc.data().num} - ${doc.data().type} ใบ</td>
       <td>${doc.data().DrawDate}</td>
       <td>${doc.data().price}</td>
-      <td>${doc.data().name} ${doc.data().time} ${doc.data().remark}</td>
+      <td>${doc.data().name} <br> ${doc.data().time} <br> ${doc.data().remark}</td>
       
       <td>
         <button class="btn btn-edit">จอง</button></button>
-        <button class="btn btn-delete">Delete</button>
+        <button class="btn btn-delete" style="display: none">Delete</button>
       </td>
     </tr>
   `;
@@ -123,7 +123,7 @@ addModalForm.addEventListener('submit', e => {
 
 // Click submit in edit modal
 editModalForm.addEventListener('submit', e => {
-  alert(editModalForm.estatus.value);
+  alert(จองเรียบร้อย);
   e.preventDefault();
   db.collection('lotto').doc(id).update({
     name: editModalForm.ename.value,
@@ -134,3 +134,10 @@ editModalForm.addEventListener('submit', e => {
   editModal.classList.remove('modal-show');
   //window.location.reload();
 });
+
+btnClose1.addEventListener('click', () => {
+  editModal.classList.remove('modal-show');
+  //window.location.reload();
+});
+
+
