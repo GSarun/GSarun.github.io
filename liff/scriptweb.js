@@ -8,7 +8,7 @@ const editModal = document.querySelector('.edit-modal');
 const editModalForm = document.querySelector('.edit-modal .form');
 
 const btnAdd = document.querySelector('.btn-add');
-const btnClose1 = document.querySelector('.btn-Close1');
+
 const tableUsers = document.querySelector('.table-users');
 
 let id;
@@ -135,9 +135,6 @@ editModalForm.addEventListener('submit', e => {
   //window.location.reload();
 });
 
-btnClose1.addEventListener('click', () => {
-  editModal.classList.remove('modal-show');
-  //window.location.reload();
-});
+
 
 
