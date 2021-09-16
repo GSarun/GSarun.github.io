@@ -17,14 +17,10 @@ let id;
 const renderUser = doc => {
   const tr = `
     <tr data-id='${doc.id}'>
-      <td>${doc.data().num}</td>
-      <td>${doc.data().type}</td>
+      <td>${doc.data().num} - ${doc.data().type} ใบ</td>
       <td>${doc.data().DrawDate}</td>
       <td>${doc.data().price}</td>
-      <td>${doc.data().name}</td>
-      <td>${doc.data().status}</td>
-      <td>${doc.data().remark}</td>
-      <td>${doc.data().time}</td>
+      <td>${doc.data().name} ${doc.data().time} ${doc.data().remark}</td>
       
       <td>
         <button class="btn btn-edit">จอง</button></button>
