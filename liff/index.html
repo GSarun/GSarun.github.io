@@ -1,147 +1,96 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+    />
+    <title>Giffy Lotto จองเลขผ่านไลน์</title>
+    <link rel="stylesheet" href="./styleweb.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport"
-    content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover" />
-  <title>Giffy Lotto จองเลขผ่านไลน์</title>
+  <body>
 
-  <link rel="stylesheet" href="css/style.css" media="all" />
-</head>
-
-<body>
-  <p id="userId" style="display: none"></p>
-
-  <div class="container">
-    <div class="row">
-      <div class="col"><img id="pictureUrl" /></div>
-      <div class="col" id="displayName">ยินดีต้อนรับ คุณ</div>
-      <div class="col"></div>
+    <p id="userId" style="display: none"></p>
+    <div class="container">
+      <div class="row">
+        <div class="col"><img id="pictureUrl" /></div>
+        <div class="col" id="displayName">ยินดีต้อนรับ คุณ</div>
+        <div class="col"></div>
+      </div>
     </div>
-  </div>
- 
-  <!--
-  <p id="os"><b>OS:</b> </p>
-  <p id="language"><b>Language:</b> </p>
-  <p id="version"><b>Version:</b> </p>
-  <p id="isInClient"><b>isInClient:</b> </p>
-  <p id="accessToken"><b>AccessToken:</b> </p>
-  <img id="pictureUrl">
-  <p id="userId"><b>userId:</b> </p>
-  <p id="displayName"><b>displayName:</b> </p>
-  <p id="statusMessage"><b>statusMessage:</b> </p>
-  <p id="decodedIDToken"><b>email:</b> </p>
-  <p id="type"><b>type:</b> </p>
-  <p id="viewType"><b>viewType:</b> </p>
-  <p id="utouId"><b>utouId:</b> </p>
-  <p id="roomId"><b>roomId:</b> </p>
-  <p id="groupId"><b>groupId:</b> </p>
-  <p id="friendship"><b>isFriendship:</b> </p>
-  <p id="scanCode"><b>Code:</b> </p>
- 
-  <p id="universalLink1"><b>Universal Link:</b> </p>
-  <p id="universalLink2"><b>Universal Link with Query params:</b> </p>
-  <p><a href="liff/path/?param=9">Link to Path</a></p>
-  <button id="btnMsg" onclick="sendMsg()">Send Message</button>
-  <button id="btnShare" onclick="shareMsg()">Share Target Picker</button>
-  <button onclick="openWindow()">Open Window</button>
-  <button id="btnScanCode" onclick="scanCode()">Scan Code</button>
-  <button id="btnLogOut" onclick="logOut()">Log Out</button>
-    <p id="isLoggedIn"><b></b></p>
-    -->
 
-  <button id="btnClose" onclick="closed()">ปิด</button>
-  <button id="btnLogOut" onclick="logOut()">ออกจากระบบ</button>
+    <button id="btnClose" onclick="closed()">ปิด</button>
+    <button id="btnLogOut" onclick="logOut()">ออกจากระบบ</button>
 
-  <!-- <script src="js/vconsole.min.js"></script> -->
-  <!-- <script>
+    <!-- <script src="js/vconsole.min.js"></script> -->
+    <!-- <script>
     var vConsole = new VConsole()
     console.log("Hello World!")
   </script> -->
 
-  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script>
-    function createUniversalLink() { }
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script>
+      function createUniversalLink() {}
 
-    async function shareMsg() { }
+      async function shareMsg() {}
 
-    function logOut() {
-      liff.logout();
-      window.location.reload();
-    }
-
-    function closed() {
-      liff.closeWindow();
-    }
-
-    async function scanCode() { }
-
-    function openWindow() { }
-
-    async function getFriendship() { }
-
-    async function sendMsg() {
-      if (liff.getContext().type != "none") {
-      }
-    }
-
-    function getContext() { }
-
-    async function getUserProfile() {
-      const profile = await liff.getProfile();
-      document.getElementById("pictureUrl").src = profile.pictureUrl;
-      document.getElementById("userId").append(profile.userId);
-      document.getElementById("displayName").append(profile.displayName);
-    }
-
-    function getEnvironment() {
-     // document.getElementById("os").append(liff.getOS())
-      if (liff.getOS() != "web"){
-document.getElementById("btnLogOut").style.display = "none"
-
-
-      }else[
-document.getElementById("btnClose").style.display = "none"
-
-      ]
-      //document.getElementById("isInClient").append(liff.isInClient())
-    }
-
-    async function main() {
-      //alert("LINE Developers x Skooldio")
-      await liff.init({ liffId: "1656426131-rq8pBYd2" });
-      //document.getElementById("isLoggedIn").append(liff.isLoggedIn());
-      if (liff.isLoggedIn()) {
-        getEnvironment()
-        getUserProfile();
-      } else {
-        liff.login();
+      function logOut() {
+        liff.logout();
+        window.location.reload();
       }
 
+      function closed() {
+        liff.closeWindow();
+      }
 
-      // getContext()
-      // getFriendship()
-      // createUniversalLink()
-    }
-    main();
-  </script>
+      async function scanCode() {}
 
-  <!-- JavaScript Libraries -->
-  <script src="../lib/jquery/jquery.min.js"></script>
-  <script src="../lib/jquery/jquery-migrate.min.js"></script>
-  <script src="../lib/popper/popper.min.js"></script>
-  <script src="../lib/bootstrap/js/bootstrap.min.js"></script>
-  <script src="../lib/easing/easing.min.js"></script>
-  <script src="../lib/counterup/jquery.waypoints.min.js"></script>
-  <script src="../lib/counterup/jquery.counterup.js"></script>
-  <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
-  <script src="../lib/lightbox/js/lightbox.min.js"></script>
-  <script src="../lib/typed/typed.min.js"></script>
-  <!-- Contact Form JavaScript File -->
-  <script src="../contactform/contactform.js"></script>
-  <!-- Template Main Javascript File -->
-  <script src="../js/main.js"></script>
-</body>
+      function openWindow() {}
 
+      async function getFriendship() {}
+
+      async function sendMsg() {
+        if (liff.getContext().type != "none") {
+        }
+      }
+
+      function getContext() {}
+
+      async function getUserProfile() {
+        const profile = await liff.getProfile();
+        document.getElementById("pictureUrl").src = profile.pictureUrl;
+        document.getElementById("userId").append(profile.userId);
+        document.getElementById("displayName").append(profile.displayName);
+      }
+
+      function getEnvironment() {
+        // document.getElementById("os").append(liff.getOS())
+        if (liff.getOS() != "web") {
+          document.getElementById("btnLogOut").style.display = "none";
+        } else [(document.getElementById("btnClose").style.display = "none")];
+        //document.getElementById("isInClient").append(liff.isInClient())
+      }
+
+      async function main() {
+        //alert("LINE Developers x Skooldio")
+        await liff.init({ liffId: "1656426131-rq8pBYd2" });
+        //document.getElementById("isLoggedIn").append(liff.isLoggedIn());
+        if (liff.isLoggedIn()) {
+          getEnvironment();
+          getUserProfile();
+        } else {
+          liff.login();
+        }
+
+        // getContext()
+        // getFriendship()
+        // createUniversalLink()
+      }
+      main();
+    </script>
+
+
+  </body>
 </html>
