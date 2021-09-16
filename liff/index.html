@@ -11,6 +11,106 @@
   </head>
 
   <body>
+    <div class="container">
+      <header>
+        <h3>List</h3>
+      </header>
+      <div class="table-wrapper">
+        <table class="table-users">
+          <tr>
+            <th>เลข</th>
+            <th>ประเภท</th>
+            <th>งวด</th>
+            <th>ราคา</th>
+            <th>ผู้จอง</th>
+            <th>สถานะ</th>
+            <th>รายละเอียด</th>
+            <th>เวลา</th>
+            <th>Action</th>
+          </tr>
+        </table>
+        <button class="btn btn-add">เพิ่มเลข</button>
+      </div>
+      <!-- Add Modal -->
+      <div class="add-modal modal-wrapper">
+        <div class="modal">
+          <div class="modal-header"><h3>เพิ่มเลข</h3></div>
+          <div class="modal-body">
+            <form class="form" autocomplete="off">
+              <input type="text" name="num" placeholder="เลข" />
+              <input
+                type="number"
+                name="type"
+                placeholder="คู่ เดียว"
+                value="1"
+              />
+              <input type="text" name="DrawDate" placeholder="งวด" />
+              <input
+                type="number"
+                name="price"
+                placeholder="price"
+                value="90"
+              />
+              <input type="hidden" name="name" placeholder="name" />
+              <input type="hidden" name="remark" placeholder="remark" />
+              <input type="hidden" name="status" placeholder="status" />
+              <input type="hidden" name="time" placeholder="time" />
+              <button class="btn btn-modal">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Modal -->
+      <div class="edit-modal modal-wrapper">
+        <div class="modal">
+          <div class="modal-header"><h3>จอง</h3></div>
+          <div class="modal-body">
+            <form class="form" autocomplete="off">
+              <input type="text" name="ename" placeholder="ผู้จอง" />
+              <input type="text" name="eremark" placeholder="รายละเอียด" />
+              <input type="hidden" name="estatus" placeholder="" />
+              <input type="hidden" name="etime" placeholder="เวลา" />
+              <button class="btn btn-modal">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+      https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-firestore.js"></script>
+
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyAu5zfoDlYuCvHhoRIGh7ToxTpxUtxD2H0",
+        authDomain: "webtest1-fd9bf.firebaseapp.com",
+        databaseURL: "https://webtest1-fd9bf.firebaseio.com",
+        projectId: "webtest1-fd9bf",
+        storageBucket: "webtest1-fd9bf.appspot.com",
+        messagingSenderId: "G-EQHSK41GY9",
+        appId: "1:42135682945:web:e20610bb93f2ce5132f280",
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+    </script>
+    <script src="./scriptweb.js"></script>
+
+
+
+
+
+
+
+
+
 
     <p id="userId" style="display: none"></p>
     <div class="container">
