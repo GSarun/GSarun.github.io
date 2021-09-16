@@ -123,7 +123,7 @@ addModalForm.addEventListener('submit', e => {
 
 // Click submit in edit modal
 editModalForm.addEventListener('submit', e => {
-  alert(จองเรียบร้อย);
+  alert("จองเรียบร้อย");
   e.preventDefault();
   db.collection('lotto').doc(id).update({
     name: editModalForm.ename.value,
