@@ -62,7 +62,7 @@ const renderUser = (doc) => {
 
       id = doc.id;
       editModalForm.enum.value = doc.data().num;
-      editModalForm.ename.value = doc.data().name;
+      //editModalForm.ename.value = doc.data().name;
       editModalForm.eremark.value = doc.data().remark;
       editModalForm.estatus.value = doc.data().status;
       editModalForm.etime.value = n;
