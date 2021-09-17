@@ -1,27 +1,45 @@
-const modalWrapper = document.querySelector('.modal-wrapper');
+const modalWrapper = document.querySelector(".modal-wrapper");
 // modal add
-const addModal = document.querySelector('.add-modal');
-const addModalForm = document.querySelector('.add-modal .form');
+const addModal = document.querySelector(".add-modal");
+const addModalForm = document.querySelector(".add-modal .form");
 
 // modal edit
-const editModal = document.querySelector('.edit-modal');
-const editModalForm = document.querySelector('.edit-modal .form');
+const editModal = document.querySelector(".edit-modal");
+const editModalForm = document.querySelector(".edit-modal .form");
 
-const btnAdd = document.querySelector('.btn-add');
+const btnAdd = document.querySelector(".btn-add");
 
-const tableUsers = document.querySelector('.table-users');
+const tableUsers = document.querySelector(".table-users");
 
 let id;
 
 // Create element and render users
-const renderUser = doc => {
-    alert(doc.data().name);
-  const tr = `
+const renderUser = (doc) => {
+  //alert(doc.data().name);
+  if (doc.data().name != "") {
+    const tr = `
     <tr data-id='${doc.id}'>
       <td>${doc.data().num} <br> ${doc.data().type} ใบ</td>
       <td>${doc.data().DrawDate}</td>
       <td>${doc.data().price}</td>
       <td>${doc.data().name} <br> ${doc.data().time} <br> ${doc.data().remark}</td>
+      
+      <td>
+        
+      </td>
+    </tr>
+  `;
+
+    tableUsers.insertAdjacentHTML("beforeend", tr);
+  } else {
+    const tr = `
+    <tr data-id='${doc.id}'>
+      <td>${doc.data().num} <br> ${doc.data().type} ใบ</td>
+      <td>${doc.data().DrawDate}</td>
+      <td>${doc.data().price}</td>
+      <td>${doc.data().name} <br> ${doc.data().time} <br> ${
+      doc.data().remark
+    }</td>
       
       <td>
         <button class="btn btn-edit">จอง</button></button>
@@ -30,15 +48,16 @@ const renderUser = doc => {
     </tr>
   `;
 
-  tableUsers.insertAdjacentHTML('beforeend', tr);
+    tableUsers.insertAdjacentHTML("beforeend", tr);
+  }
 
   // Click edit user
   const btnEdit = document.querySelector(`[data-id='${doc.id}'] .btn-edit`);
-  btnEdit.addEventListener('click', () => {
-    editModal.classList.add('modal-show');
+  btnEdit.addEventListener("click", () => {
+    editModal.classList.add("modal-show");
 
-  var d = new Date();
-  var n = d.toLocaleString('th-TH', { timeZone: 'Asia/Jakarta' })
+    var d = new Date();
+    var n = d.toLocaleString("th-TH", { timeZone: "Asia/Jakarta" });
 
     id = doc.id;
     editModalForm.enum.value = doc.data().num;
@@ -46,39 +65,41 @@ const renderUser = doc => {
     editModalForm.eremark.value = doc.data().remark;
     editModalForm.estatus.value = doc.data().status;
     editModalForm.etime.value = n;
-
   });
 
   // Click delete user
   const btnDelete = document.querySelector(`[data-id='${doc.id}'] .btn-delete`);
-  btnDelete.addEventListener('click', () => {
-    db.collection('lotto').doc(`${doc.id}`).delete().then(() => {
-      alert("succesfully deleted!");
-      console.log('Document succesfully deleted!');
-    }).catch(err => {
-      console.log('Error removing document', err);
-    });
+  btnDelete.addEventListener("click", () => {
+    db.collection("lotto")
+      .doc(`${doc.id}`)
+      .delete()
+      .then(() => {
+        alert("succesfully deleted!");
+        console.log("Document succesfully deleted!");
+      })
+      .catch((err) => {
+        console.log("Error removing document", err);
+      });
   });
-
-}
+};
 
 // Click add user button
-btnAdd.addEventListener('click', () => {
-  addModal.classList.add('modal-show');
+btnAdd.addEventListener("click", () => {
+  addModal.classList.add("modal-show");
 
-  addModalForm.num.value = '';
-  addModalForm.type.value = '';
-  addModalForm.DrawDate.value = '';
-  addModalForm.price.value = '';
+  addModalForm.num.value = "";
+  addModalForm.type.value = "";
+  addModalForm.DrawDate.value = "";
+  addModalForm.price.value = "";
 });
 
 // User click anyware outside the modal
-window.addEventListener('click', e => {
-  if(e.target === addModal) {
-    addModal.classList.remove('modal-show');
+window.addEventListener("click", (e) => {
+  if (e.target === addModal) {
+    addModal.classList.remove("modal-show");
   }
-  if(e.target === editModal) {
-    editModal.classList.remove('modal-show');
+  if (e.target === editModal) {
+    editModal.classList.remove("modal-show");
   }
 });
 
@@ -90,29 +111,31 @@ window.addEventListener('click', e => {
 // });
 
 // Real time listener
-db.collection('lotto').orderBy('num').onSnapshot(snapshot => {
-  snapshot.docChanges().forEach(change => {
-    if(change.type === 'added') {
-      renderUser(change.doc);
-    }
-    if(change.type === 'removed') {
-      let tr = document.querySelector(`[data-id='${change.doc.id}']`);
-      let tbody = tr.parentElement;
-      tableUsers.removeChild(tbody);
-    }
-    if(change.type === 'modified') {
-      let tr = document.querySelector(`[data-id='${change.doc.id}']`);
-      let tbody = tr.parentElement;
-      tableUsers.removeChild(tbody);
-      renderUser(change.doc);
-    }
-  })
-})
+db.collection("lotto")
+  .orderBy("num")
+  .onSnapshot((snapshot) => {
+    snapshot.docChanges().forEach((change) => {
+      if (change.type === "added") {
+        renderUser(change.doc);
+      }
+      if (change.type === "removed") {
+        let tr = document.querySelector(`[data-id='${change.doc.id}']`);
+        let tbody = tr.parentElement;
+        tableUsers.removeChild(tbody);
+      }
+      if (change.type === "modified") {
+        let tr = document.querySelector(`[data-id='${change.doc.id}']`);
+        let tbody = tr.parentElement;
+        tableUsers.removeChild(tbody);
+        renderUser(change.doc);
+      }
+    });
+  });
 
 // Click submit in add modal
-addModalForm.addEventListener('submit', e => {
+addModalForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  db.collection('lotto').add({
+  db.collection("lotto").add({
     num: addModalForm.num.value,
     type: addModalForm.type.value,
     DrawDate: addModalForm.DrawDate.value,
@@ -122,23 +145,19 @@ addModalForm.addEventListener('submit', e => {
     status: addModalForm.status.value,
     time: addModalForm.time.value,
   });
-  modalWrapper.classList.remove('modal-show');
+  modalWrapper.classList.remove("modal-show");
 });
 
 // Click submit in edit modal
-editModalForm.addEventListener('submit', e => {
+editModalForm.addEventListener("submit", (e) => {
   alert("จองเรียบร้อย");
   e.preventDefault();
-  db.collection('lotto').doc(id).update({
+  db.collection("lotto").doc(id).update({
     name: editModalForm.ename.value,
     remark: editModalForm.eremark.value,
-    status: 'จอง',
+    status: "จอง",
     time: editModalForm.etime.value,
   });
-  editModal.classList.remove('modal-show');
+  editModal.classList.remove("modal-show");
   //window.location.reload();
 });
-
-
-
-
