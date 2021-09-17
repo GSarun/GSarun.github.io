@@ -49,23 +49,25 @@ const renderUser = (doc) => {
   `;
 
     tableUsers.insertAdjacentHTML("beforeend", tr);
+
+    // Click edit user
+    const btnEdit = document.querySelector(`[data-id='${doc.id}'] .btn-edit`);
+    btnEdit.addEventListener("click", () => {
+      editModal.classList.add("modal-show");
+
+      var d = new Date();
+      var n = d.toLocaleString("th-TH", { timeZone: "Asia/Jakarta" });
+
+      id = doc.id;
+      editModalForm.enum.value = doc.data().num;
+      editModalForm.ename.value = doc.data().name;
+      editModalForm.eremark.value = doc.data().remark;
+      editModalForm.estatus.value = doc.data().status;
+      editModalForm.etime.value = n;
+    });
   }
 
-  // Click edit user
-  const btnEdit = document.querySelector(`[data-id='${doc.id}'] .btn-edit`);
-  btnEdit.addEventListener("click", () => {
-    editModal.classList.add("modal-show");
 
-    var d = new Date();
-    var n = d.toLocaleString("th-TH", { timeZone: "Asia/Jakarta" });
-
-    id = doc.id;
-    editModalForm.enum.value = doc.data().num;
-    editModalForm.ename.value = doc.data().name;
-    editModalForm.eremark.value = doc.data().remark;
-    editModalForm.estatus.value = doc.data().status;
-    editModalForm.etime.value = n;
-  });
 
   // Click delete user
   const btnDelete = document.querySelector(`[data-id='${doc.id}'] .btn-delete`);
