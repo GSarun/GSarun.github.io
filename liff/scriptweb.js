@@ -15,9 +15,10 @@ let id;
 
 // Create element and render users
 const renderUser = doc => {
+    alert(doc.data().name);
   const tr = `
     <tr data-id='${doc.id}'>
-      <td>${doc.data().num} - ${doc.data().type} ใบ</td>
+      <td>${doc.data().num} <br> ${doc.data().type} ใบ</td>
       <td>${doc.data().DrawDate}</td>
       <td>${doc.data().price}</td>
       <td>${doc.data().name} <br> ${doc.data().time} <br> ${doc.data().remark}</td>
@@ -28,6 +29,7 @@ const renderUser = doc => {
       </td>
     </tr>
   `;
+
   tableUsers.insertAdjacentHTML('beforeend', tr);
 
   // Click edit user
@@ -39,6 +41,7 @@ const renderUser = doc => {
   var n = d.toLocaleString('th-TH', { timeZone: 'Asia/Jakarta' })
 
     id = doc.id;
+    editModalForm.enum.value = doc.data().num;
     editModalForm.ename.value = doc.data().name;
     editModalForm.eremark.value = doc.data().remark;
     editModalForm.estatus.value = doc.data().status;
@@ -50,6 +53,7 @@ const renderUser = doc => {
   const btnDelete = document.querySelector(`[data-id='${doc.id}'] .btn-delete`);
   btnDelete.addEventListener('click', () => {
     db.collection('lotto').doc(`${doc.id}`).delete().then(() => {
+      alert("succesfully deleted!");
       console.log('Document succesfully deleted!');
     }).catch(err => {
       console.log('Error removing document', err);
@@ -86,7 +90,7 @@ window.addEventListener('click', e => {
 // });
 
 // Real time listener
-db.collection('lotto').onSnapshot(snapshot => {
+db.collection('lotto').orderBy('num').onSnapshot(snapshot => {
   snapshot.docChanges().forEach(change => {
     if(change.type === 'added') {
       renderUser(change.doc);
