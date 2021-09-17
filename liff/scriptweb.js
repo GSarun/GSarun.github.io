@@ -22,7 +22,9 @@ const renderUser = (doc) => {
       <td>${doc.data().num} <br> ${doc.data().type} ใบ</td>
       <td>${doc.data().DrawDate}</td>
       <td>${doc.data().price}</td>
-      <td>${doc.data().name} <br> ${doc.data().time} <br> ${doc.data().remark}</td>
+      <td>${doc.data().name} <br> ${doc.data().time} <br> ${
+      doc.data().remark
+    }</td>
       
       <td>
         
@@ -65,25 +67,29 @@ const renderUser = (doc) => {
       editModalForm.estatus.value = doc.data().status;
       editModalForm.etime.value = n;
     });
+
+    // Click delete user
+    const btnDelete = document.querySelector(
+      `[data-id='${doc.id}'] .btn-delete`
+    );
+    btnDelete.addEventListener("click", () => {
+      db.collection("lotto")
+        .doc(`${doc.id}`)
+        .delete()
+        .then(() => {
+          alert("succesfully deleted!");
+          console.log("Document succesfully deleted!");
+        })
+        .catch((err) => {
+          console.log("Error removing document", err);
+        });
+    });
   }
-
-
-
-  // Click delete user
-  const btnDelete = document.querySelector(`[data-id='${doc.id}'] .btn-delete`);
-  btnDelete.addEventListener("click", () => {
-    db.collection("lotto")
-      .doc(`${doc.id}`)
-      .delete()
-      .then(() => {
-        alert("succesfully deleted!");
-        console.log("Document succesfully deleted!");
-      })
-      .catch((err) => {
-        console.log("Error removing document", err);
-      });
-  });
 };
+
+
+
+
 
 // Click add user button
 btnAdd.addEventListener("click", () => {
