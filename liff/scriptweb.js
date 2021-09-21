@@ -16,7 +16,7 @@ let id;
 // Create element and render users
 const renderUser = (doc) => {
   //alert(doc.data().name);
-  if (doc.data().name != "") {
+  if (doc.data().status != "") {
     const tr = `
     <tr data-id='${doc.id}'>
       <td>${doc.data().num} <br> ${doc.data().type} ใบ</td>
