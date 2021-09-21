@@ -44,8 +44,8 @@ const renderUser = (doc) => {
     }</td>
       
       <td>
-        <button class="btn btn-edit">จอง</button></button>
-        <button class="btn btn-delete" style="display: none">Delete</button>
+        <button class="btn btn-edit">แก้ไข</button></button>
+        <button class="btn btn-delete" >ลบ</button>
       </td>
     </tr>
   `;
