@@ -142,6 +142,9 @@ db.collection("lotto")
 
 // Click submit in add modal
 addModalForm.addEventListener("submit", (e) => {
+        var d = new Date();
+        var n = d.toLocaleString("th-TH", { timeZone: "Asia/Jakarta" });
+
   e.preventDefault();
   db.collection("lotto").add({
     num: addModalForm.num.value,
@@ -151,7 +154,7 @@ addModalForm.addEventListener("submit", (e) => {
     name: addModalForm.name.value,
     remark: addModalForm.remark.value,
     status: addModalForm.status.value,
-    time: addModalForm.time.value,
+    time: n,
   });
   modalWrapper.classList.remove("modal-show");
 });
