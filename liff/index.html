@@ -39,7 +39,7 @@
               <input type="number" name="type"  placeholder="คู่ เดียว"  value="1"/>
               <input type="hidden" name="DrawDate" placeholder="งวด" />
               <input type="hidden" name="price" placeholder="price" value="90" />
-              <input type="text" name="name" placeholder="name" />
+              <input type="text" id="ename" name="name" placeholder="name"  readonly/>
               <input type="text" name="remark" placeholder="remark" />
               <input type="hidden" name="status" placeholder="status" />
               <input type="hidden" name="time" placeholder="time" />
@@ -136,8 +136,8 @@
         document.getElementById("pictureUrl").src = profile.pictureUrl;
         document.getElementById("userId").append(profile.userId);
         document.getElementById("displayName").append(profile.displayName);
+        document.getElementById("name").value = profile.displayName;
         document.getElementById("ename").value = profile.displayName;
-        
       }
 
       function getEnvironment() {
