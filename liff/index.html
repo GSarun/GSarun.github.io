@@ -30,7 +30,7 @@
         <button class="btn btn-c1" id="btnLogOut" onclick="logOut()">ออกจากระบบ</button>
       </div>
       <!-- Add Modal -->
-      <div class="add-modal modal-wrapper">
+      <div class="add-modal modal-wrapper" id="add-modal1">
         <div class="modal">
           <div class="modal-header"><h3>เพิ่มเลข</h3></div>
           <div class="modal-body">
@@ -54,6 +54,7 @@
               <input type="hidden" name="status" placeholder="status" />
               <input type="hidden" name="time" placeholder="time" />
               <button class="btn btn-modal">Submit</button>
+              <button type="button" class="btn btnClose1" data-dismiss="modal" onclick="document.getElementById('add-modal1').style.display='none'; window.location.reload();">Close</button>
             </form>
           </div>
         </div>
