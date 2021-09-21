@@ -7,7 +7,10 @@
       content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
     />
     <title>Giffy Lotto จองเลขผ่านไลน์</title>
-    <link rel="stylesheet" href="./styleweb.css" />
+    <!--<link rel="stylesheet" href="./styleweb.css" />-->
+    <script>
+      document.write('link rel="stylesheet" href="./styleweb.css?cache=' +new Date().getTime()+ '">')
+    </script>
   </head>
 
   <body>
@@ -91,8 +94,8 @@
       firebase.initializeApp(firebaseConfig);
       const db = firebase.firestore();
     </script>
-    <script src="./scriptweb.js"></script>
-
+    <!--<script src="./scriptweb.js"></script>-->
+    <script src="./scriptweb.js?version=<?= time() ?>"></script>
     <p id="userId" style="display: none"></p>
         <div class="col"><img id="pictureUrl" / style="display:none"></div>
 

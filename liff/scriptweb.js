@@ -45,7 +45,7 @@ const renderUser = (doc) => {
       
       <td>
         <button class="btn btn-edit">แก้ไข</button></button>
-        <button class="btn btn-delete">ลบ</button>
+        <button class="btn btn-delete" >ลบ</button>
       </td>
     </tr>
   `;
