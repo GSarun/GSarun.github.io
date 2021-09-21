@@ -20,7 +20,6 @@ const renderUser = (doc) => {
     const tr = `
     <tr data-id='${doc.id}'>
       <td>${doc.data().num} <br> ${doc.data().type} ใบ</td>
-    
       <td>${doc.data().price}</td>
       <td>${doc.data().name} <br> ${doc.data().time} <br> ${
       doc.data().remark
@@ -37,7 +36,6 @@ const renderUser = (doc) => {
     const tr = `
     <tr data-id='${doc.id}'>
       <td>${doc.data().num} <br> ${doc.data().type} ใบ</td>
-      
       <td>${doc.data().price}</td>
       <td>${doc.data().name} <br> ${doc.data().time} <br> ${
       doc.data().remark
