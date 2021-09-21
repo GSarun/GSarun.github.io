@@ -159,13 +159,16 @@ addModalForm.addEventListener("submit", (e) => {
 
 // Click submit in edit modal
 editModalForm.addEventListener("submit", (e) => {
-  alert("จองเรียบร้อย");
+  alert("แก้ไขเรียบร้อย");
+          var d = new Date();
+          var n = d.toLocaleString("th-TH", { timeZone: "Asia/Jakarta" });
   e.preventDefault();
   db.collection("lotto").doc(id).update({
+    num: editModalForm.enum.value,
+    type: editModalForm.etype.value,
     name: editModalForm.ename.value,
     remark: editModalForm.eremark.value,
-    status: "จอง",
-    time: editModalForm.etime.value,
+    time: n,
   });
   editModal.classList.remove("modal-show");
   //window.location.reload();
