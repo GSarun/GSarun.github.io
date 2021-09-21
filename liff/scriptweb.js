@@ -20,12 +20,12 @@ const renderUser = (doc) => {
     const tr = `
     <tr data-id='${doc.id}'>
       <td>${doc.data().num} <br> ${doc.data().type} ใบ</td>
-      <td>${doc.data().DrawDate}</td>
+    
       <td>${doc.data().price}</td>
       <td>${doc.data().name} <br> ${doc.data().time} <br> ${
       doc.data().remark
     }</td>
-      
+            <td>${doc.data().status}</td>
       <td>
         
       </td>
@@ -37,12 +37,12 @@ const renderUser = (doc) => {
     const tr = `
     <tr data-id='${doc.id}'>
       <td>${doc.data().num} <br> ${doc.data().type} ใบ</td>
-      <td>${doc.data().DrawDate}</td>
+      
       <td>${doc.data().price}</td>
       <td>${doc.data().name} <br> ${doc.data().time} <br> ${
       doc.data().remark
     }</td>
-      
+            <td>${doc.data().status}</td>
       <td>
         <button class="btn btn-edit">แก้ไข</button></button>
         <button class="btn btn-delete" >ลบ</button>
