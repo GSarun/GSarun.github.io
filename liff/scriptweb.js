@@ -85,10 +85,6 @@ const renderUser = (doc) => {
   }
 };
 
-
-
-
-
 // Click add user button
 btnAdd.addEventListener("click", () => {
   addModal.classList.add("modal-show");
@@ -118,7 +114,7 @@ window.addEventListener("click", (e) => {
 
 // Real time listener
 db.collection("lotto")
-  .orderBy("num")
+  .orderBy("time")
   .onSnapshot((snapshot) => {
     snapshot.docChanges().forEach((change) => {
       if (change.type === "added") {
@@ -140,8 +136,8 @@ db.collection("lotto")
 
 // Click submit in add modal
 addModalForm.addEventListener("submit", (e) => {
-        var d = new Date();
-        var n = d.toLocaleString("th-TH", { timeZone: "Asia/Jakarta" });
+  var d = new Date();
+  var n = d.toLocaleString("th-TH", { timeZone: "Asia/Jakarta" });
 
   e.preventDefault();
   db.collection("lotto").add({
@@ -160,8 +156,8 @@ addModalForm.addEventListener("submit", (e) => {
 // Click submit in edit modal
 editModalForm.addEventListener("submit", (e) => {
   alert("แก้ไขเรียบร้อย");
-          var d = new Date();
-          var n = d.toLocaleString("th-TH", { timeZone: "Asia/Jakarta" });
+  var d = new Date();
+  var n = d.toLocaleString("th-TH", { timeZone: "Asia/Jakarta" });
   e.preventDefault();
   db.collection("lotto").doc(id).update({
     num: editModalForm.enum.value,
