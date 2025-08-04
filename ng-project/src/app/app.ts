@@ -1,12 +1,22 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+
+
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [FormsModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
+
 export class App {
-  protected readonly title = signal('ng-project');
+  username="admin"
+  name="Aui Sarun"
+  age ="20"
+  address = "สส"
+  showAddress(){
+    return "ที่อยู่ "+this.address
+  }
+
 }
