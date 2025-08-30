@@ -4,33 +4,61 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
+      <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+    #word { font-size: 32px; margin-bottom: 20px; }
+    #input { font-size: 20px; padding: 5px; }
+    #score, #timer { font-size: 24px; margin-top: 10px; }
+  </style>
 </head>
 
 <body>
-  <h1>เกมคลิกให้ทันเวลา</h1>
-  <button onclick="startGame()">เริ่มเกม</button>
-  <button id="clickBtn" onclick="winGame()">คลิกเร็ว!</button>
-  <div id="message"></div>
+  <h1>เกมหัดพิมพ์</h1>
+  <div id="word">เริ่มเกม!</div>
+  <input type="text" id="input" placeholder="พิมพ์ตรงนี้" oninput="checkInput()" />
+  <div id="score">คะแนน: 0</div>
+  <div id="timer">เวลา: 10</div>
 
   <script>
-    let timer;
+    const words = ["แมว", "บ้าน", "ต้นไม้", "รถยนต์", "ทะเล", "ฝนตก", "เรียนรู้", "ความรัก"];
+    let currentWord = "";
+    let score = 0;
+    let time = 10;
+    let timerInterval;
 
-    function startGame() {
-      document.getElementById("message").textContent = "";
-      document.getElementById("clickBtn").style.display = "inline-block";
-
-      timer = setTimeout(() => {
-        document.getElementById("clickBtn").style.display = "none";
-        document.getElementById("message").textContent = "คุณแพ้! หมดเวลาแล้ว";
-      }, 5000); // 5 วินาที
+    function newWord() {
+      currentWord = words[Math.floor(Math.random() * words.length)];
+      document.getElementById("word").textContent = currentWord;
+      document.getElementById("input").value = "";
+      time = 10;
+      document.getElementById("timer").textContent = "เวลา: " + time;
+      clearInterval(timerInterval);
+      timerInterval = setInterval(countdown, 1000);
     }
 
-    function winGame() {
-      clearTimeout(timer);
-      document.getElementById("clickBtn").style.display = "none";
-      document.getElementById("message").textContent = "คุณชนะ! คลิกทันเวลา";
+    function countdown() {
+      time--;
+      document.getElementById("timer").textContent = "เวลา: " + time;
+      if (time === 0) {
+        clearInterval(timerInterval);
+        score--;
+        document.getElementById("score").textContent = "คะแนน: " + score;
+        newWord();
+      }
     }
+
+    function checkInput() {
+      const input = document.getElementById("input").value;
+      if (input === currentWord) {
+        clearInterval(timerInterval);
+        score++;
+        document.getElementById("score").textContent = "คะแนน: " + score;
+        newWord();
+      }
+    }
+
+    // เริ่มเกมทันที
+    newWord();
   </script>
 </body>
-
 </html>
