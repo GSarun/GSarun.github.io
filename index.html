@@ -4,154 +4,83 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Kanit', sans-serif;
-            background: linear-gradient(135deg, #f8ffae 0%, #43c6ac 100%);
-            min-height: 100vh;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .container {
-            background: #fff;
-            border-radius: 20px;
-            box-shadow: 0 8px 32px 0 rgba(60, 60, 60, 0.15);
-            padding: 40px 32px 32px 32px;
-            max-width: 350px;
-            width: 100%;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 2.2rem;
-            color: #43c6ac;
-            margin-bottom: 24px;
-            font-weight: 700;
-            letter-spacing: 2px;
-        }
-
-        #word {
-            font-size: 2rem;
-            margin-bottom: 24px;
-            color: #222;
-            font-weight: 600;
-            background: #f8ffae;
-            border-radius: 12px;
-            padding: 12px 0;
-            box-shadow: 0 2px 8px rgba(67, 198, 172, 0.08);
-        }
-
-        #input {
-            font-size: 1.2rem;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #43c6ac;
-            outline: none;
-            margin-bottom: 18px;
-            width: 80%;
-            transition: border 0.2s;
-        }
-
-        #input:focus {
-            border: 2px solid #43c6ac;
-        }
-
-        #score,
-        #timer {
-            font-size: 1.3rem;
-            margin-top: 10px;
-            color: #222;
-            font-weight: 500;
-            background: #e0f7fa;
-            border-radius: 8px;
-            padding: 8px 0;
-            margin-bottom: 8px;
-            box-shadow: 0 1px 4px rgba(67, 198, 172, 0.07);
-        }
-
-        @media (max-width: 500px) {
-            .container {
-                padding: 24px 8px;
-            }
-
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            #word {
-                font-size: 1.2rem;
-            }
-        }
-    </style>
+      <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+    #word { font-size: 32px; margin-bottom: 20px; }
+    #input { font-size: 20px; padding: 5px; }
+    #score, #timer { font-size: 24px; margin-top: 10px; }
+  </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>เกมหัดพิมพ์</h1>
-        <div id="word">เริ่มเกม!</div>
-        <input type="text" id="input" placeholder="พิมพ์ตรงนี้" oninput="checkInput()" autocomplete="off" />
-        <div id="score">คะแนน: 0</div>
-        <div id="timer">เวลา: 10</div>
-    </div>
+  <h1>เกมหัดพิมพ์</h1>
+  <div id="word">เริ่มเกม!</div>
+  <input type="text" id="input" placeholder="พิมพ์ตรงนี้" oninput="checkInput()" />
+  <div id="score">คะแนน: 0</div>
+  <div id="timer">เวลา: 10</div>
 
-    <script>
-        let words = [];
-        let currentWord = "";
-        let score = 0;
-        let time = 10;
-        let timerInterval;
+  <script>
+    let words = [];
+    let currentWord = "";
+    let score = 0;
+    let highScore = localStorage.getItem("highScore") ? parseInt(localStorage.getItem("highScore")) : 0;
+    let time = 10;
+    let timerInterval;
 
-        // ดึงคำศัพท์จากไฟล์ thai-wordlist.json
-        fetch('thai-wordlist.json')
-            .then(response => response.json())
-            .then(data => {
-                words = data;
-                newWord();
-            });
+    // ดึงคำศัพท์จากไฟล์ thai-wordlist.json
+    fetch('thai-wordlist.json')
+        .then(response => response.json())
+        .then(data => {
+            words = data;
+            newWord();
+        });
 
-        function newWord() {
-            if (words.length === 0) return;
-            currentWord = words[Math.floor(Math.random() * words.length)];
-            document.getElementById("word").textContent = currentWord;
-            document.getElementById("input").value = "";
-            time = 10;
-            document.getElementById("timer").textContent = "เวลา: " + time;
+    function newWord() {
+        if (words.length === 0) return;
+        currentWord = words[Math.floor(Math.random() * words.length)];
+        document.getElementById("word").textContent = currentWord;
+        document.getElementById("input").value = "";
+        time = 10;
+        document.getElementById("timer").textContent = "เวลา: " + time;
+        clearInterval(timerInterval);
+        timerInterval = setInterval(countdown, 1000);
+    }
+
+    function countdown() {
+        time--;
+        document.getElementById("timer").textContent = "เวลา: " + time;
+        if (time === 0) {
             clearInterval(timerInterval);
-            timerInterval = setInterval(countdown, 1000);
-        }
-
-        function countdown() {
-            time--;
-            document.getElementById("timer").textContent = "เวลา: " + time;
-            if (time === 0) {
-                clearInterval(timerInterval);
-                score--;
-                document.getElementById("score").textContent = "คะแนน: " + score;
+            score--;
+            document.getElementById("score").textContent = "คะแนน: " + score;
+            if (score < 0) {
+                gameOver();
+            } else {
                 newWord();
             }
         }
+    }
 
-        function checkInput() {
-            const input = document.getElementById("input").value;
-            if (input === currentWord) {
-                clearInterval(timerInterval);
-                score++;
-                document.getElementById("score").textContent = "คะแนน: " + score;
-                newWord();
-            }
+    function checkInput() {
+        const input = document.getElementById("input").value;
+        if (input === currentWord) {
+            clearInterval(timerInterval);
+            score++;
+            document.getElementById("score").textContent = "คะแนน: " + score;
+            newWord();
         }
+    }
 
-        function gameOver() {
-            document.getElementById("word").textContent = "Game Over!";
-            document.getElementById("input").disabled = true;
-            document.getElementById("timer").textContent = "เวลา: 0";
+    function gameOver() {
+        if (score > highScore) {
+            highScore = score;
+            localStorage.setItem("highScore", highScore);
         }
-    </script>
+        document.getElementById("word").innerHTML = `Game Over!<br>คะแนนสูงสุด: ${highScore}`;
+        document.getElementById("input").disabled = true;
+        document.getElementById("timer").textContent = "เวลา: 0";
+    }
+</script>
+<!-- ...existing code... -->
 </body>
-
 </html>
