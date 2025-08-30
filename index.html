@@ -20,11 +20,19 @@
   <div id="timer">เวลา: 10</div>
 
   <script>
-    const words = ["แมว", "บ้าน", "ต้นไม้", "รถยนต์", "ทะเล", "ฝนตก", "เรียนรู้", "ความรัก"];
+    let words = [];
     let currentWord = "";
     let score = 0;
     let time = 10;
     let timerInterval;
+
+  // ดึงคำศัพท์จากไฟล์ words.json
+  fetch('thai-wordlist.json')
+    .then(response => response.json())
+    .then(data => {
+      words = data;
+      newWord();
+    });
 
     function newWord() {
       currentWord = words[Math.floor(Math.random() * words.length)];
