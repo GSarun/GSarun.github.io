@@ -154,7 +154,7 @@
         let wordObj = activeWords[i];
         wordObj.y += fallSpeed;
         wordObj.elem.style.top = wordObj.y + "px";
-        if (wordObj.y > 280) { // ถ้าคำตกถึงขอบล่าง
+        if (wordObj.y > 520) { // ถ้าคำตกถึงขอบล่าง
           wordObj.elem.remove();
           activeWords.splice(i, 1);
           missed++;
