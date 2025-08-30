@@ -2,84 +2,192 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>Aui_th</title>
+  <title>เกมส์หัดพิมพ์</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: sans-serif; text-align: center; background: #f0f0f0; }
-    #gameArea { position: relative; width: 400px; height: 400px; margin: 20px auto; background: #fff; border: 2px solid #333; overflow: hidden; }
-    .word { position: absolute; font-size: 24px; color: #333; }
-    #inputBox { margin-top: 20px; font-size: 18px; padding: 5px; }
-    #status { margin-top: 10px; font-weight: bold; }
+    body {
+      font-family: 'Kanit', sans-serif;
+      background: linear-gradient(135deg, #f8ffae 0%, #43c6ac 100%);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(60,60,60,0.15);
+      padding: 32px 24px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+    }
+    #gameArea {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      background: #e0f7fa;
+      border-radius: 12px;
+      margin: 0 auto 16px auto;
+      overflow: hidden;
+      border: 2px solid #43c6ac;
+    }
+    .word {
+      position: absolute;
+      font-size: 1.3rem;
+      color: #222;
+      background: #f8ffae;
+      border-radius: 8px;
+      padding: 6px 18px;
+      box-shadow: 0 2px 8px rgba(67,198,172,0.08);
+      left: 0;
+      top: 0;
+      white-space: nowrap;
+      user-select: none;
+      pointer-events: none;
+    }
+    #inputBox {
+      font-size: 1.2rem;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #43c6ac;
+      outline: none;
+      width: 80%;
+      margin-bottom: 12px;
+    }
+    #inputBox:focus {
+      border: 2px solid #43c6ac;
+    }
+    #score, #missed, #status {
+      font-size: 1.1rem;
+      margin: 8px 0;
+      color: #222;
+      font-weight: 500;
+    }
+    #status {
+      color: #e53935;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+    button {
+      font-family: 'Kanit', sans-serif;
+      font-size: 1rem;
+      padding: 8px 24px;
+      border-radius: 8px;
+      border: none;
+      background: #43c6ac;
+      color: #fff;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #388e7c;
+    }
   </style>
 </head>
 <body>
-  <h1>เกมหัดพิมพ์</h1>
-  <div id="gameArea"></div>
-  <input type="text" id="inputBox" placeholder="พิมพ์คำที่เห็น..." autofocus />
-  <div id="status"></div>
-
+  <div class="container">
+    <h1>เกมส์หัดพิมพ์</h1>
+    <div id="gameArea"></div>
+    <input type="text" id="inputBox" placeholder="พิมพ์คำที่ตกลงมา" autocomplete="off" />
+    <div id="score">คะแนน: 0</div>
+    <div id="missed">พลาด: 0/3</div>
+    <div id="status"></div>
+    <button id="restartBtn" style="display:none;">เริ่มใหม่</button>
+  </div>
   <script>
-    const words = ["แมว", "หมา", "บ้าน", "รถ", "ต้นไม้", "ทะเล", "ภูเขา", "ดวงจันทร์"];
-    const gameArea = document.getElementById("gameArea");
-    const inputBox = document.getElementById("inputBox");
-    const status = document.getElementById("status");
-
-    let missed = 0;
+    let words = [];
     let activeWords = [];
+    let score = 0;
+    let missed = 0;
+    let gameInterval;
+    let fallSpeed = 2; // px per tick
 
-    function createWord() {
+    // โหลดคำจาก thai-wordlist.json
+    fetch('thai-wordlist.json')
+      .then(response => response.json())
+      .then(data => {
+        words = data;
+        console.log(words); 
+        startGame();
+      });
+
+    function startGame() {
+      score = 0;
+      missed = 0;
+      activeWords = [];
+      document.getElementById("score").textContent = "คะแนน: 0";
+      document.getElementById("missed").textContent = "พลาด: 0/3";
+      document.getElementById("status").textContent = "";
+      document.getElementById("restartBtn").style.display = "none";
+      document.getElementById("inputBox").disabled = false;
+      document.getElementById("inputBox").value = "";
+      document.getElementById("gameArea").innerHTML = "";
+      clearInterval(gameInterval);
+      gameInterval = setInterval(gameTick, 50);
+      setTimeout(spawnWord, 500);
+      document.getElementById("inputBox").focus();
+    }
+
+    function spawnWord() {
+      if (missed >= 3) return;
+      if (words.length === 0) return;
       const wordText = words[Math.floor(Math.random() * words.length)];
       const wordElem = document.createElement("div");
       wordElem.className = "word";
       wordElem.textContent = wordText;
-      wordElem.style.left = Math.random() * 300 + "px";
+      wordElem.style.left = Math.random() * 220 + "px";
       wordElem.style.top = "0px";
-      gameArea.appendChild(wordElem);
-
-      const wordObj = { elem: wordElem, text: wordText, y: 0 };
-      activeWords.push(wordObj);
+      document.getElementById("gameArea").appendChild(wordElem);
+      activeWords.push({ elem: wordElem, text: wordText, y: 0 });
+      // spawn คำใหม่ทุก 1.5-2.5 วินาที
+      if (missed < 3) setTimeout(spawnWord, 1500 + Math.random() * 1000);
     }
 
-    function updateWords() {
-      activeWords.forEach((word, index) => {
-        word.y += 2;
-        word.elem.style.top = word.y + "px";
-
-        if (word.y > 380) {
+    function gameTick() {
+      for (let i = activeWords.length - 1; i >= 0; i--) {
+        let wordObj = activeWords[i];
+        wordObj.y += fallSpeed;
+        wordObj.elem.style.top = wordObj.y + "px";
+        if (wordObj.y > 280) { // ถ้าคำตกถึงขอบล่าง
+          wordObj.elem.remove();
+          activeWords.splice(i, 1);
           missed++;
-          gameArea.removeChild(word.elem);
-          activeWords.splice(index, 1);
-          checkGameOver();
+          document.getElementById("missed").textContent = `พลาด: ${missed}/3`;
+          if (missed >= 3) {
+            gameOver();
+          }
         }
-      });
-    }
-
-    function checkGameOver() {
-      if (missed >= 3) {
-        status.textContent = "Game Over!";
-        clearInterval(gameLoop);
-        inputBox.disabled = true;
-      } else {
-        status.textContent = `พลาดไปแล้ว ${missed} คำ`;
       }
     }
 
-    inputBox.addEventListener("input", () => {
-      const typed = inputBox.value.trim();
-      for (let i = 0; i < activeWords.length; i++) {
-        if (activeWords[i].text === typed) {
-          gameArea.removeChild(activeWords[i].elem);
+    document.getElementById("inputBox").addEventListener("input", function() {
+      const val = this.value.trim();
+      for (let i = activeWords.length - 1; i >= 0; i--) {
+        if (activeWords[i].text === val) {
+          activeWords[i].elem.remove();
           activeWords.splice(i, 1);
-          inputBox.value = "";
+          score++;
+          document.getElementById("score").textContent = "คะแนน: " + score;
+          this.value = "";
           break;
         }
       }
     });
 
-    const gameLoop = setInterval(() => {
-      if (Math.random() < 0.3) createWord();
-      updateWords();
-    }, 500);
-  </script>
+    function gameOver() {
+      clearInterval(gameInterval);
+      document.getElementById("status").textContent = "Game Over!";
+      document.getElementById("inputBox").disabled = true;
+      document.getElementById("restartBtn").style.display = "inline-block";
+    }
 
+    document.getElementById("restartBtn").onclick = startGame;
+  </script>
 </body>
 </html>
