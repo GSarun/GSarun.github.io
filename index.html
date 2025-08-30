@@ -99,69 +99,69 @@
         <div id="timer">เวลา: 10</div>
     </div>
 
-<script>
-    let words = [];
-    let currentWord = "";
-    let score = 0;
-    let highScore = localStorage.getItem("highScore") ? parseInt(localStorage.getItem("highScore")) : 0;
-    let time = 10;
-    let timerInterval;
+    <script>
+        let words = [];
+        let currentWord = "";
+        let score = 0;
+        let highScore = localStorage.getItem("highScore") ? parseInt(localStorage.getItem("highScore")) : 0;
+        let time = 10;
+        let timerInterval;
 
-    // ดึงคำศัพท์จากไฟล์ thai-wordlist.json
-    fetch('thai-wordlist.json')
-        .then(response => response.json())
-        .then(data => {
-            words = data;
-            newWord();
-        });
+        // ดึงคำศัพท์จากไฟล์ thai-wordlist.json
+        fetch('thai-wordlist.json')
+            .then(response => response.json())
+            .then(data => {
+                words = data;
+                newWord();
+            });
 
-    function newWord() {
-        if (words.length === 0) return;
-        currentWord = words[Math.floor(Math.random() * words.length)];
-        document.getElementById("word").textContent = currentWord;
-        document.getElementById("input").value = "";
-        time = 10;
-        document.getElementById("timer").textContent = "เวลา: " + time;
-        clearInterval(timerInterval);
-        timerInterval = setInterval(countdown, 1000);
-    }
-
-    function countdown() {
-        time--;
-        document.getElementById("timer").textContent = "เวลา: " + time;
-        if (time === 0) {
+        function newWord() {
+            if (words.length === 0) return;
+            currentWord = words[Math.floor(Math.random() * words.length)];
+            document.getElementById("word").textContent = currentWord;
+            document.getElementById("input").value = "";
+            time = 10;
+            document.getElementById("timer").textContent = "เวลา: " + time;
             clearInterval(timerInterval);
-            score--;
-            document.getElementById("score").textContent = "คะแนน: " + score;
-            if (score < 0) {
-                gameOver();
-            } else {
+            timerInterval = setInterval(countdown, 1000);
+        }
+
+        function countdown() {
+            time--;
+            document.getElementById("timer").textContent = "เวลา: " + time;
+            if (time === 0) {
+                clearInterval(timerInterval);
+                if (score === 0) {
+                    gameOver();
+                } else {
+                    score--;
+                    document.getElementById("score").textContent = "คะแนน: " + score;
+                    newWord();
+                }
+            }
+        }
+
+        function checkInput() {
+            const input = document.getElementById("input").value;
+            if (input === currentWord) {
+                clearInterval(timerInterval);
+                score++;
+                document.getElementById("score").textContent = "คะแนน: " + score;
                 newWord();
             }
         }
-    }
 
-    function checkInput() {
-        const input = document.getElementById("input").value;
-        if (input === currentWord) {
-            clearInterval(timerInterval);
-            score++;
-            document.getElementById("score").textContent = "คะแนน: " + score;
-            newWord();
+        function gameOver() {
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem("highScore", highScore);
+            }
+            document.getElementById("word").innerHTML = `Game Over!<br>คะแนนสูงสุด: ${highScore}`;
+            document.getElementById("input").disabled = true;
+            document.getElementById("timer").textContent = "เวลา: 0";
         }
-    }
-
-    function gameOver() {
-        if (score > highScore) {
-            highScore = score;
-            localStorage.setItem("highScore", highScore);
-        }
-        document.getElementById("word").innerHTML = `Game Over!<br>คะแนนสูงสุด: ${highScore}`;
-        document.getElementById("input").disabled = true;
-        document.getElementById("timer").textContent = "เวลา: 0";
-    }
-</script>
-<!-- ...existing code...
+    </script>
+    <!-- ...existing code...
 </body>
 
 </html>
