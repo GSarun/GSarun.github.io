@@ -82,11 +82,14 @@
       background: #43c6ac;
       color: #fff;
       cursor: pointer;
-      margin-top: 12px;
+      margin: 4px;
       transition: background 0.2s;
     }
     button:hover {
       background: #388e7c;
+    }
+    #difficultySelection {
+      margin-top: 12px;
     }
   </style>
 </head>
@@ -94,11 +97,15 @@
   <div class="container">
     <h1>เกมส์หัดพิมพ์</h1>
     <div id="gameArea"></div>
-    <input type="text" id="inputBox" placeholder="พิมพ์คำที่ตกลงมา" autocomplete="off" />
+    <input type="text" id="inputBox" placeholder="เลือกระดับความยากเพื่อเริ่ม" autocomplete="off" disabled />
     <div id="score">คะแนน: 0</div>
     <div id="missed">พลาด: 0/3</div>
     <div id="status"></div>
-    <button id="restartBtn" style="display:none;">เริ่มใหม่</button>
+    <div id="difficultySelection">
+      <button class="difficulty-btn" data-difficulty="easy">ง่าย</button>
+      <button class="difficulty-btn" data-difficulty="medium">ปานกลาง</button>
+      <button class="difficulty-btn" data-difficulty="hard">ยาก</button>
+    </div>
   </div>
   <script>
     let words = [];
@@ -106,16 +113,36 @@
     let score = 0;
     let missed = 0;
     let gameInterval;
-    let fallSpeed = 2; // px per tick
+    let fallSpeed = 2;
+    let spawnRate = 1500;
+    let spawnRandom = 1000;
+
+    const difficultySettings = {
+      easy: { fallSpeed: 1.5, spawnRate: 2000, spawnRandom: 1000 },
+      medium: { fallSpeed: 2, spawnRate: 1500, spawnRandom: 1000 },
+      hard: { fallSpeed: 3, spawnRate: 800, spawnRandom: 700 }
+    };
+
+    const inputBox = document.getElementById("inputBox");
+    const difficultyButtons = document.querySelectorAll('.difficulty-btn');
 
     // โหลดคำจาก thai-wordlist.json
     fetch('thai-wordlist.json')
       .then(response => response.json())
       .then(data => {
         words = data;
-        console.log(words); 
+      });
+
+    difficultyButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        const difficulty = e.target.dataset.difficulty;
+        const settings = difficultySettings[difficulty];
+        fallSpeed = settings.fallSpeed;
+        spawnRate = settings.spawnRate;
+        spawnRandom = settings.spawnRandom;
         startGame();
       });
+    });
 
     function startGame() {
       score = 0;
@@ -124,14 +151,15 @@
       document.getElementById("score").textContent = "คะแนน: 0";
       document.getElementById("missed").textContent = "พลาด: 0/3";
       document.getElementById("status").textContent = "";
-      document.getElementById("restartBtn").style.display = "none";
-      document.getElementById("inputBox").disabled = false;
-      document.getElementById("inputBox").value = "";
+      inputBox.disabled = false;
+      inputBox.value = "";
+      inputBox.placeholder = "พิมพ์คำที่ตกลงมา";
       document.getElementById("gameArea").innerHTML = "";
       clearInterval(gameInterval);
       gameInterval = setInterval(gameTick, 50);
-      setTimeout(spawnWord, 500);
-      document.getElementById("inputBox").focus();
+      setTimeout(spawnWord, 500); // เริ่มคำแรกเร็วหน่อย
+      inputBox.focus();
+      difficultyButtons.forEach(btn => btn.disabled = true);
     }
 
     function spawnWord() {
@@ -145,8 +173,8 @@
       wordElem.style.top = "0px";
       document.getElementById("gameArea").appendChild(wordElem);
       activeWords.push({ elem: wordElem, text: wordText, y: 0 });
-      // spawn คำใหม่ทุก 1.5-2.5 วินาที
-      if (missed < 3) setTimeout(spawnWord, 1500 + Math.random() * 1000);
+      // spawn คำใหม่ตามระดับความยาก
+      if (missed < 3) setTimeout(spawnWord, spawnRate + Math.random() * spawnRandom);
     }
 
     function gameTick() {
@@ -183,11 +211,11 @@
     function gameOver() {
       clearInterval(gameInterval);
       document.getElementById("status").textContent = "Game Over!";
-      document.getElementById("inputBox").disabled = true;
-      document.getElementById("restartBtn").style.display = "inline-block";
+      inputBox.disabled = true;
+      inputBox.placeholder = "เลือกระดับความยากเพื่อเริ่มใหม่";
+      difficultyButtons.forEach(btn => btn.disabled = false);
     }
 
-    document.getElementById("restartBtn").onclick = startGame;
   </script>
 </body>
 </html>
