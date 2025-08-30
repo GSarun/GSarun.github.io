@@ -7,7 +7,30 @@
 </head>
 
 <body>
-GSarun.github.io
+  <h1>เกมคลิกให้ทันเวลา</h1>
+  <button onclick="startGame()">เริ่มเกม</button>
+  <button id="clickBtn" onclick="winGame()">คลิกเร็ว!</button>
+  <div id="message"></div>
+
+  <script>
+    let timer;
+
+    function startGame() {
+      document.getElementById("message").textContent = "";
+      document.getElementById("clickBtn").style.display = "inline-block";
+
+      timer = setTimeout(() => {
+        document.getElementById("clickBtn").style.display = "none";
+        document.getElementById("message").textContent = "คุณแพ้! หมดเวลาแล้ว";
+      }, 5000); // 5 วินาที
+    }
+
+    function winGame() {
+      clearTimeout(timer);
+      document.getElementById("clickBtn").style.display = "none";
+      document.getElementById("message").textContent = "คุณชนะ! คลิกทันเวลา";
+    }
+  </script>
 </body>
 
 </html>
