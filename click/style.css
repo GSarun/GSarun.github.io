@@ -1,0 +1,34 @@
+body {
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+#game-container {
+    width: 600px;
+    height: 800px;
+    border: 3px solid #333;
+    background-color: #add8e6; /* สีฟ้าอ่อนเหมือนท้องฟ้า */
+    position: relative; /* สำคัญมาก! เพื่อให้วัตถุอยู่ภายในกรอบนี้ */
+    overflow: hidden; /* ซ่อนวัตถุที่ออกนอกกรอบ */
+    cursor: crosshair;
+}
+
+#score-board {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.falling-object {
+    position: absolute; /* ทำให้เราสามารถกำหนดตำแหน่ง top/left ได้ */
+    width: 50px;
+    height: 50px;
+    background-color: #ff6347; /* สีแดงมะเขือเทศ */
+    border-radius: 50%; /* ทำให้เป็นวงกลม */
+    cursor: pointer;
+}
