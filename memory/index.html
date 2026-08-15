@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory Match - เกมจับคู่การ์ดพรีเมียม</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&family=Orbitron:wght@500;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="game-container">
+    <header class="game-header">
+      <a href="../index.html" class="back-btn">← กลับหน้าหลัก</a>
+      <h1 class="game-title">MEMORY <span class="accent">MATCH</span></h1>
+    </header>
+
+    <div class="game-wrapper">
+      <!-- Control Panel -->
+      <div class="control-panel">
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="label">เวลา</div>
+            <div id="timer" class="value">00:00</div>
+          </div>
+          <div class="stat-box">
+            <div class="label">จำนวนครั้งที่พลิก</div>
+            <div id="moves" class="value">0</div>
+          </div>
+        </div>
+
+        <div class="settings-box">
+          <h3>ตั้งค่าเกม</h3>
+          
+          <label>ระดับความยาก</label>
+          <div class="difficulty-select">
+            <button class="diff-btn active" data-grid="4x3">ง่าย (12 ใบ)</button>
+            <button class="diff-btn" data-grid="4x4">กลาง (16 ใบ)</button>
+            <button class="diff-btn" data-grid="6x4">ยาก (24 ใบ)</button>
+          </div>
+
+          <label>เลือกธีมการ์ด</label>
+          <div class="theme-select">
+            <button class="theme-btn active" data-theme="space">🚀 อวกาศ</button>
+            <button class="theme-btn" data-theme="animals">🦁 สัตว์ป่า</button>
+            <button class="theme-btn" data-theme="food">🍕 อาหาร</button>
+          </div>
+
+          <button id="restartBtn" class="game-btn">เริ่มเกมใหม่</button>
+        </div>
+
+        <div class="score-box">
+          <div class="label">เวลาที่ดีที่สุด (ธีมปัจจุบัน)</div>
+          <div id="bestTime" class="value">-</div>
+        </div>
+      </div>
+
+      <!-- Game Board Grid -->
+      <div class="board-container">
+        <div id="gameBoard" class="game-board grid-4x3">
+          <!-- Cards will be dynamically inserted here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Win Modal Overlay -->
+  <div id="winOverlay" class="overlay">
+    <div class="overlay-content">
+      <h2 class="win-title">ยินดีด้วย คุณชนะแล้ว! 🎉</h2>
+      <p>คุณจับคู่ครบทั้งหมดในเวลา <span id="winTime" class="highlight">00:00</span> ด้วยการพลิกทั้งหมด <span id="winMoves" class="highlight-moves">0</span> ครั้ง</p>
+      <p id="newRecordMsg" class="success-text hide">ทำลายสถิติเวลาใหม่! 🏆</p>
+      <button id="playAgainBtn" class="game-btn">เล่นอีกรอบ</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Merge 2048 - เกมต่อตัวเลขพรีเมียม</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&family=Orbitron:wght@500;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="game-container">
+    <header class="game-header">
+      <a href="../index.html" class="back-btn">← กลับหน้าหลัก</a>
+      <h1 class="game-title">MERGE <span class="accent">2048</span></h1>
+    </header>
+
+    <div class="game-wrapper">
+      <div class="board-container">
+        <div id="gameBoard" class="game-board">
+          <!-- Background Cells -->
+          <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+          <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+          <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+          <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+
+          <!-- Active tiles will be rendered dynamically here -->
+          <div id="tileContainer" class="tile-container"></div>
+        </div>
+
+        <div id="gameOverOverlay" class="overlay">
+          <div class="overlay-content">
+            <h2 class="danger-text">GAME OVER!</h2>
+            <p>คะแนนสุดท้ายของคุณ: <span id="finalScore" class="highlight">0</span> แต้ม</p>
+            <button id="restartBtn" class="game-btn">เล่นอีกครั้ง</button>
+          </div>
+        </div>
+
+        <div id="winOverlay" class="overlay">
+          <div class="overlay-content">
+            <h2 class="success-text">YOU REACHED 2048! 🏆</h2>
+            <p>ยินดีด้วยกับชัยชนะระดับพรีเมียม!</p>
+            <button id="keepPlayingBtn" class="game-btn">เล่นต่อไป</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="control-panel">
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="label">คะแนน</div>
+            <div id="currentScore" class="value">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="label">สูงสุด</div>
+            <div id="highScore" class="value">0</div>
+          </div>
+        </div>
+
+        <div class="settings-box">
+          <h3>ตั้งค่าสไตล์</h3>
+          <div class="theme-select">
+            <button class="theme-btn active" data-theme="neon">นีออนไซเบอร์</button>
+            <button class="theme-btn" data-theme="retro">เรโทรคลาสสิก</button>
+            <button class="theme-btn" data-theme="pastel">พาสเทลหวาน</button>
+          </div>
+        </div>
+
+        <div class="instructions">
+          <h3>วิธีเล่น</h3>
+          <p>ใช้ปุ่มลูกศร <strong>Arrow Keys</strong> หรือ <strong>W A S D</strong> ในการเลื่อนกระดานตัวเลข</p>
+          <p>หรือ <strong>ปัดหน้าจอ (Swipe)</strong> สำหรับการเล่นบนอุปกรณ์พกพา</p>
+          <p>เมื่อบล็อกตัวเลขเดียวกันชนกัน จะผสมรวมร่างบวกเพิ่มค่าเป็นเท่าตัว!</p>
+        </div>
+        
+        <button id="newGameBtn" class="game-btn reset-btn">เริ่มเกมใหม่</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

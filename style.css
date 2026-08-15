@@ -1,0 +1,404 @@
+:root {
+  --bg-color: #080c14;
+  --card-bg: rgba(17, 24, 39, 0.6);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  
+  /* Game Colors */
+  --color-tower: #f59e0b;
+  --color-memory: #3b82f6;
+  --color-snake: #10b981;
+  --color-merge: #ec4899;
+
+  --color-tower-glow: rgba(245, 158, 11, 0.15);
+  --color-memory-glow: rgba(59, 130, 246, 0.15);
+  --color-snake-glow: rgba(16, 185, 129, 0.15);
+  --color-merge-glow: rgba(236, 72, 153, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Kanit', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Ambient Glow Backgrounds */
+.glow-bg {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.glow-1 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, var(--color-memory) 0%, transparent 70%);
+  top: -100px;
+  left: -100px;
+}
+
+.glow-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--color-merge) 0%, transparent 70%);
+  bottom: -150px;
+  right: -100px;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  width: 100%;
+  padding: 40px 24px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  justify-content: space-between;
+}
+
+/* Header */
+.lobby-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.lobby-header .title {
+  font-family: 'Orbitron', 'Kanit', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.lobby-header .title .accent {
+  color: var(--color-memory);
+  text-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+}
+
+.lobby-header .subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  font-weight: 300;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Games Grid */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+/* Game Card */
+.game-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.game-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.game-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+/* Card Glow Hover Effects */
+.game-card[data-game="tower"]:hover {
+  box-shadow: 0 20px 40px var(--color-tower-glow);
+}
+.game-card[data-game="memory"]:hover {
+  box-shadow: 0 20px 40px var(--color-memory-glow);
+}
+.game-card[data-game="snake"]:hover {
+  box-shadow: 0 20px 40px var(--color-snake-glow);
+}
+.game-card[data-game="merge"]:hover {
+  box-shadow: 0 20px 40px var(--color-merge-glow);
+}
+
+/* Card Icon Header */
+.card-icon-wrapper {
+  height: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-icon-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  width: 80%;
+  height: 1px;
+  background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 80%);
+}
+
+/* Colors for Card Headers */
+.color-tower {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, transparent 75%);
+}
+.color-memory {
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 75%);
+}
+.color-snake {
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, transparent 75%);
+}
+.color-merge {
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, transparent 75%);
+}
+
+/* Custom CSS Icons */
+/* 1. Tower Stack Icon */
+.icon-tower-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 60px;
+}
+.icon-tower-stack span {
+  height: 12px;
+  background-color: var(--color-tower);
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+  transition: transform 0.3s;
+}
+.icon-tower-stack span:nth-child(1) { width: 40px; margin: 0 auto; }
+.icon-tower-stack span:nth-child(2) { width: 50px; margin: 0 auto; }
+.icon-tower-stack span:nth-child(3) { width: 60px; margin: 0 auto; }
+.game-card[data-game="tower"]:hover .icon-tower-stack span:nth-child(1) {
+  transform: translateY(-2px);
+}
+.game-card[data-game="tower"]:hover .icon-tower-stack span:nth-child(2) {
+  transform: scaleX(1.05);
+}
+
+/* 2. Memory Match Icon */
+.icon-memory-match {
+  display: flex;
+  gap: 12px;
+}
+.icon-memory-match span {
+  width: 45px;
+  height: 60px;
+  border-radius: 8px;
+  background-color: var(--color-memory);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 800;
+  font-size: 1.6rem;
+  color: white;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.icon-memory-match span:nth-child(1) {
+  transform: rotate(-10deg);
+}
+.icon-memory-match span:nth-child(2) {
+  transform: rotate(10deg);
+}
+.game-card[data-game="memory"]:hover .icon-memory-match span:nth-child(1) {
+  transform: rotateY(180deg) scale(1.05);
+  background-color: #1d4ed8;
+}
+.game-card[data-game="memory"]:hover .icon-memory-match span:nth-child(2) {
+  transform: translateY(-5px) rotate(15deg);
+}
+
+/* 3. Neon Snake Icon */
+.icon-neon-snake {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+.icon-neon-snake span:nth-child(1) {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background-color: var(--color-snake);
+  border-radius: 50%;
+  top: 15px;
+  left: 15px;
+  box-shadow: 0 0 12px var(--color-snake);
+  animation: snake-head-pulse 2s infinite alternate;
+}
+.icon-neon-snake span:nth-child(2) {
+  position: absolute;
+  width: 40px;
+  height: 14px;
+  border: 3px solid var(--color-snake);
+  border-top: none;
+  border-left: none;
+  border-radius: 0 0 12px 0;
+  top: 22px;
+  left: 22px;
+  box-shadow: 2px 2px 8px var(--color-snake-glow);
+}
+@keyframes snake-head-pulse {
+  0% { transform: scale(1); box-shadow: 0 0 8px var(--color-snake); }
+  100% { transform: scale(1.25); box-shadow: 0 0 18px var(--color-snake); }
+}
+
+/* 4. Merge Puzzle Icon */
+.icon-merge-puzzle {
+  width: 60px;
+  height: 60px;
+  background-color: var(--color-merge);
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: white;
+  box-shadow: 0 0 15px rgba(236, 72, 153, 0.5);
+  transition: transform 0.3s;
+}
+.game-card[data-game="merge"]:hover .icon-merge-puzzle {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Card Body Content */
+.card-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.game-title {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.game-desc {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  flex-grow: 1;
+}
+
+/* Buttons */
+.play-btn {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 12px;
+  color: white;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid transparent;
+}
+
+.btn-tower {
+  background-color: var(--color-tower);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+.btn-tower:hover {
+  background-color: #d97706;
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+}
+
+.btn-memory {
+  background-color: var(--color-memory);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+.btn-memory:hover {
+  background-color: #2563eb;
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+}
+
+.btn-snake {
+  background-color: var(--color-snake);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+.btn-snake:hover {
+  background-color: #059669;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+}
+
+.btn-merge {
+  background-color: var(--color-merge);
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+}
+.btn-merge:hover {
+  background-color: #db2777;
+  box-shadow: 0 6px 20px rgba(236, 72, 153, 0.5);
+}
+
+/* Footer */
+.lobby-footer {
+  text-align: center;
+  padding: 24px 0 0 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.lobby-footer p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 300;
+}
+
+/* Responsive breakpoint */
+@media (max-width: 768px) {
+  .lobby-header .title {
+    font-size: 2.2rem;
+  }
+  .lobby-header .subtitle {
+    font-size: 1rem;
+  }
+  .games-grid {
+    grid-template-columns: 1fr;
+  }
+  .container {
+    padding: 24px 16px;
+  }
+}

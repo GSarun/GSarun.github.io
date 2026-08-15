@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tower Stacker - ต่อตึกสูงระฟ้า</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&family=Orbitron:wght@500;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="game-container">
+    <header class="game-header">
+      <a href="../index.html" class="back-btn">← กลับหน้าหลัก</a>
+      <h1 class="game-title">TOWER <span class="accent">STACKER</span></h1>
+    </header>
+
+    <div class="game-wrapper">
+      <div class="canvas-container">
+        <canvas id="gameCanvas" width="350" height="500"></canvas>
+        <div id="startOverlay" class="overlay active">
+          <div class="overlay-content">
+            <h2>พร้อมจะต่อตึกหรือยัง?</h2>
+            <p>กดปุ่ม <strong>Spacebar</strong> หรือ <strong>คลิกบนหน้าจอ</strong> เพื่อปล่อยบล็อคให้ซ้อนกันพอดี</p>
+            <button id="startBtn" class="game-btn">เริ่มเกม</button>
+          </div>
+        </div>
+        <div id="gameOverOverlay" class="overlay">
+          <div class="overlay-content">
+            <h2 class="danger-text">GAME OVER!</h2>
+            <p>ความสูงตึกที่ทำได้: <span id="finalScore" class="highlight">0</span> ชั้น</p>
+            <p id="newRecordMsg" class="success-text hide">สถิติใหม่! 🎉</p>
+            <button id="restartBtn" class="game-btn">เล่นอีกครั้ง</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="score-panel">
+        <div class="score-box">
+          <div class="label">ชั้นปัจจุบัน</div>
+          <div id="currentScore" class="value">0</div>
+        </div>
+        <div class="score-box">
+          <div class="label">สถิติสูงสุด</div>
+          <div id="highScore" class="value">0</div>
+        </div>
+        <div class="score-box">
+          <div class="label">คอมโบ (Perfect)</div>
+          <div id="comboCount" class="value">0</div>
+        </div>
+        <div class="instructions">
+          <h3>วิธีเล่น</h3>
+          <ul>
+            <li>บล็อกจะขยับซ้าย-ขวาไปมา</li>
+            <li>กด Spacebar หรือคลิก/แตะที่ใดก็ได้เพื่อปล่อยบล็อก</li>
+            <li>ต้องกะจังหวะให้บล็อกวางตรงกับชั้นก่อนหน้า</li>
+            <li>ส่วนที่เกินจะถูกตัดออก ทำให้ตึกแคบลง!</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon Snake - เกมงูเรืองแสงยุคใหม่</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&family=Orbitron:wght@500;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="game-container">
+    <header class="game-header">
+      <a href="../index.html" class="back-btn">← กลับหน้าหลัก</a>
+      <h1 class="game-title">NEON <span class="accent">SNAKE</span></h1>
+    </header>
+
+    <div class="game-wrapper">
+      <div class="canvas-container">
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        <div id="startOverlay" class="overlay active">
+          <div class="overlay-content">
+            <h2>พร้อมจะตะลุยดินแดนนีออน?</h2>
+            <p>ใช้ปุ่มลูกศร <strong>Arrow Keys</strong> หรือ <strong>W A S D</strong> ในการเลี้ยวเลี่ยงสิ่งกีดขวาง</p>
+            <button id="startBtn" class="game-btn">เริ่มเกม</button>
+          </div>
+        </div>
+        <div id="gameOverOverlay" class="overlay">
+          <div class="overlay-content">
+            <h2 class="danger-text">CRASHED!</h2>
+            <p>คะแนนที่ทำได้: <span id="finalScore" class="highlight">0</span> แต้ม</p>
+            <p id="newRecordMsg" class="success-text hide">สถิติใหม่ประจำแผนที่! 🏆</p>
+            <button id="restartBtn" class="game-btn">เล่นอีกครั้ง</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="control-panel">
+        <div class="score-box">
+          <div class="label">คะแนน</div>
+          <div id="currentScore" class="value">0</div>
+        </div>
+        <div class="score-box">
+          <div class="label">คะแนนสูงสุด</div>
+          <div id="highScore" class="value">0</div>
+        </div>
+
+        <div class="settings-box">
+          <h3>แผนที่ / อุปสรรค</h3>
+          <div class="map-select">
+            <button class="map-btn active" data-map="classic">ไม่มีสิ่งกีดขวาง</button>
+            <button class="map-btn" data-map="box">กล่องสี่เหลี่ยม</button>
+            <button class="map-btn" data-map="maze">เขาวงกตนีออน</button>
+          </div>
+        </div>
+
+        <div class="powerup-box">
+          <div class="label">พลังพิเศษที่กำลังทำงาน</div>
+          <div id="powerupStatus" class="powerup-val none">ไม่มี</div>
+        </div>
+
+        <!-- On-Screen Controls for Mobile -->
+        <div class="mobile-controls">
+          <button id="ctrlUp" class="ctrl-btn">▲</button>
+          <div class="horizontal-ctrls">
+            <button id="ctrlLeft" class="ctrl-btn">◀</button>
+            <button id="ctrlRight" class="ctrl-btn">▶</button>
+          </div>
+          <button id="ctrlDown" class="ctrl-btn">▼</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
