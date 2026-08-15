@@ -10,11 +10,15 @@
   --color-memory: #3b82f6;
   --color-snake: #10b981;
   --color-merge: #ec4899;
+  --color-space: #06b6d4;
+  --color-rhythm: #a855f7;
 
   --color-tower-glow: rgba(245, 158, 11, 0.15);
   --color-memory-glow: rgba(59, 130, 246, 0.15);
   --color-snake-glow: rgba(16, 185, 129, 0.15);
   --color-merge-glow: rgba(236, 72, 153, 0.15);
+  --color-space-glow: rgba(6, 182, 212, 0.15);
+  --color-rhythm-glow: rgba(168, 85, 247, 0.15);
 }
 
 * {
@@ -153,6 +157,12 @@ body {
 .game-card[data-game="merge"]:hover {
   box-shadow: 0 20px 40px var(--color-merge-glow);
 }
+.game-card[data-game="space"]:hover {
+  box-shadow: 0 20px 40px var(--color-space-glow);
+}
+.game-card[data-game="rhythm"]:hover {
+  box-shadow: 0 20px 40px var(--color-rhythm-glow);
+}
 
 /* Card Icon Header */
 .card-icon-wrapper {
@@ -186,6 +196,12 @@ body {
 }
 .color-merge {
   background: radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, transparent 75%);
+}
+.color-space {
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.2) 0%, transparent 75%);
+}
+.color-rhythm {
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, transparent 75%);
 }
 
 /* Custom CSS Icons */
@@ -301,6 +317,62 @@ body {
   transform: scale(1.1) rotate(5deg);
 }
 
+/* 5. Space Defender Icon */
+.icon-space-defender {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+}
+.ship-body {
+  font-size: 2.2rem;
+  color: var(--color-space);
+  text-shadow: 0 0 15px var(--color-space);
+  transition: transform 0.3s;
+}
+.ship-wing {
+  position: absolute;
+  width: 6px;
+  height: 16px;
+  background: var(--color-space);
+  border-radius: 2px;
+  bottom: 12px;
+  box-shadow: 0 0 8px var(--color-space);
+}
+.ship-wing.left { left: 8px; }
+.ship-wing.right { right: 8px; }
+.game-card[data-game="space"]:hover .ship-body {
+  transform: translateY(-8px) scale(1.1);
+}
+
+/* 6. Rhythm Beats Icon */
+.icon-rhythm-beats {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 50px;
+  width: 60px;
+  justify-content: center;
+}
+.icon-rhythm-beats span {
+  width: 8px;
+  background: var(--color-rhythm);
+  border-radius: 4px;
+  box-shadow: 0 0 10px var(--color-rhythm);
+  animation: rhythm-bounce 1.2s infinite ease-in-out alternate;
+}
+.icon-rhythm-beats span:nth-child(1) { height: 20px; animation-delay: 0s; }
+.icon-rhythm-beats span:nth-child(2) { height: 45px; animation-delay: 0.3s; }
+.icon-rhythm-beats span:nth-child(3) { height: 30px; animation-delay: 0.15s; }
+.icon-rhythm-beats span:nth-child(4) { height: 40px; animation-delay: 0.45s; }
+
+@keyframes rhythm-bounce {
+  0% { transform: scaleY(0.4); }
+  100% { transform: scaleY(1.1); }
+}
+
 /* Card Body Content */
 .card-content {
   padding: 24px;
@@ -372,6 +444,24 @@ body {
 .btn-merge:hover {
   background-color: #db2777;
   box-shadow: 0 6px 20px rgba(236, 72, 153, 0.5);
+}
+
+.btn-space {
+  background-color: var(--color-space);
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+.btn-space:hover {
+  background-color: #0891b2;
+  box-shadow: 0 6px 20px rgba(6, 182, 212, 0.5);
+}
+
+.btn-rhythm {
+  background-color: var(--color-rhythm);
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+}
+.btn-rhythm:hover {
+  background-color: #9333ea;
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
 }
 
 /* Footer */

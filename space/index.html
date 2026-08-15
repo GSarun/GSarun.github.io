@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Space Defender - เกมยิงยานอวกาศ Arcade</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&family=Orbitron:wght@500;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="game-container">
+    <header class="game-header">
+      <a href="../index.html" class="back-btn">← กลับหน้าหลัก</a>
+      <h1 class="game-title">SPACE <span class="accent">DEFENDER</span></h1>
+    </header>
+
+    <div class="game-wrapper">
+      <div class="canvas-container">
+        <canvas id="gameCanvas" width="400" height="550"></canvas>
+        
+        <!-- Boss HP Bar -->
+        <div id="bossBarContainer" class="boss-bar-container hide">
+          <div class="boss-label">⚠️ WARNING: ENEMY FLAGSHIP</div>
+          <div class="boss-bar-track">
+            <div id="bossHpFill" class="boss-bar-fill"></div>
+          </div>
+        </div>
+
+        <div id="startOverlay" class="overlay active">
+          <div class="overlay-content">
+            <h2>ปกป้องกาแล็กซี</h2>
+            <p>ควบคุมยานด้วย <strong>เมาส์ / สัมผัส</strong> หรือปุ่ม <strong>WASD / ลูกศร</strong></p>
+            <p>กด <strong>Spacebar</strong> หรือ <strong>คลิกค้าง</strong> เพื่อยิงกระสุน</p>
+            <button id="startBtn" class="game-btn">เริ่มภารกิจ</button>
+          </div>
+        </div>
+
+        <div id="gameOverOverlay" class="overlay">
+          <div class="overlay-content">
+            <h2 class="danger-text">MISSION FAILED!</h2>
+            <p>คะแนนที่คุณทำได้: <span id="finalScore" class="highlight">0</span> แต้ม</p>
+            <p id="newRecordMsg" class="success-text hide">สถิติสูงสุดใหม่ของกาแล็กซี! 🏆</p>
+            <button id="restartBtn" class="game-btn">เริ่มภารกิจใหม่</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="control-panel">
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="label">คะแนน</div>
+            <div id="currentScore" class="value">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="label">สถิติสูงสุด</div>
+            <div id="highScore" class="value">0</div>
+          </div>
+        </div>
+
+        <div class="status-box">
+          <div class="label">เกราะพลังงาน (SHIELDS)</div>
+          <div class="shield-bars" id="shieldContainer">
+            <span class="shield-pip active"></span>
+            <span class="shield-pip active"></span>
+            <span class="shield-pip active"></span>
+          </div>
+        </div>
+
+        <div class="status-box">
+          <div class="label">ระดับอาวุธ (WEAPON)</div>
+          <div id="weaponLevelText" class="weapon-level">SINGLE BLASTER</div>
+        </div>
+
+        <div class="bomb-box">
+          <div class="label">ระเบิด EMP BOMB (กด B หรือคลิก)</div>
+          <button id="bombBtn" class="bomb-btn">💣 <span id="bombCount">1</span></button>
+        </div>
+
+        <div class="instructions">
+          <h3>ไอเทมในเกม</h3>
+          <ul class="item-list">
+            <li><span class="item-icon p-weapon">P</span> เพิ่มระดับและความเร็วการยิง</li>
+            <li><span class="item-icon p-shield">S</span> ฟื้นฟูเกราะพลังงาน +1</li>
+            <li><span class="item-icon p-bomb">B</span> เพิ่มระเบิด EMP ล้างจอ +1</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rhythm Beats - เกมกดโน้ตตามจังหวะ</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&family=Orbitron:wght@500;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="glow-bg"></div>
+
+  <div class="game-container">
+    <header class="game-header">
+      <a href="../index.html" class="back-btn">← กลับหน้าหลัก</a>
+      <h1 class="game-title">RHYTHM <span class="accent">BEATS</span></h1>
+    </header>
+
+    <div class="game-wrapper">
+      <!-- Rhythm Highway Board -->
+      <div class="highway-container">
+        <!-- YouTube Player Container (Invisible or Mini screen) -->
+        <div id="ytContainer" class="yt-container hide">
+          <div id="ytPlayer"></div>
+        </div>
+
+        <canvas id="gameCanvas" width="340" height="520"></canvas>
+        
+        <!-- Judgment text animation floating -->
+        <div id="judgmentText" class="judgment-text"></div>
+
+        <!-- Touch Targets for Mobile -->
+        <div class="touch-controls">
+          <button class="lane-touch-btn" data-lane="0">D</button>
+          <button class="lane-touch-btn" data-lane="1">F</button>
+          <button class="lane-touch-btn" data-lane="2">J</button>
+          <button class="lane-touch-btn" data-lane="3">K</button>
+        </div>
+
+        <div id="startOverlay" class="overlay active">
+          <div class="overlay-content">
+            <h2>พร้อมจับจังหวะดนตรี?</h2>
+            <p>กดปุ่ม <strong>D, F, J, K</strong> หรือ <strong>แตะแถบเลน</strong> เมื่อตัวโน้ตเลื่อนมาถึงเส้นล่างสุดพอดี</p>
+            <button id="startBtn" class="game-btn">เริ่มเล่น</button>
+          </div>
+        </div>
+
+        <div id="resultOverlay" class="overlay">
+          <div class="overlay-content">
+            <h2 id="resultTitle" class="highlight">STAGE CLEAR! 🎉</h2>
+            <div class="results-stats">
+              <p>คะแนนรวม: <span id="finalScore" class="stat-val">0</span></p>
+              <p>คอมโบสูงสุด: <span id="maxComboDisplay" class="stat-val">0</span></p>
+              <p>PERFECT: <span id="perfectCount" class="stat-val color-p">0</span></p>
+              <p>GREAT: <span id="greatCount" class="stat-val color-g">0</span></p>
+              <p>MISS: <span id="missCount" class="stat-val color-m">0</span></p>
+            </div>
+            <button id="restartBtn" class="game-btn">เล่นอีกครั้ง</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Control Panel -->
+      <div class="control-panel">
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="label">คะแนน</div>
+            <div id="currentScore" class="value">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="label">COMBO</div>
+            <div id="comboDisplay" class="value combo-val">0</div>
+          </div>
+        </div>
+
+        <!-- Groove/Health Gauge -->
+        <div class="gauge-box">
+          <div class="label">GROOVE GAUGE</div>
+          <div class="gauge-track">
+            <div id="gaugeFill" class="gauge-fill" style="width: 100%;"></div>
+          </div>
+        </div>
+
+        <!-- Music Mode Selector -->
+        <div class="music-settings">
+          <h3>เลือกโหมดเพลง</h3>
+          <div class="mode-tabs">
+            <button id="modeSynthBtn" class="mode-tab active">🎹 เพลง Synthwave</button>
+            <button id="modeYtBtn" class="mode-tab">🎬 YouTube</button>
+          </div>
+
+          <!-- Synth Track Options -->
+          <div id="synthOptions" class="track-select">
+            <button class="track-btn active" data-track="city">🌆 Cyber City (120 BPM)</button>
+            <button class="track-btn" data-track="highway">🏎️ Neon Highway (135 BPM)</button>
+            <button class="track-btn" data-track="space">🌌 Starlight Cruise (150 BPM)</button>
+          </div>
+
+          <!-- YouTube Options -->
+          <div id="ytOptions" class="yt-settings hide">
+            <label>เลือกเพลง YouTube แนะนำ:</label>
+            <select id="ytSongSelect" class="yt-select">
+              <option value="gCYcTST8sVY">The Fat Rat - Unity (Electronic)</option>
+              <option value="bM7SZ5SBzyY">Alan Walker - Fade (EDM)</option>
+              <option value="4xDzrJKXOOY">Retro Synthwave Megamix</option>
+            </select>
+            
+            <div class="custom-yt-box">
+              <label>หรือใส่ YouTube Video ID:</label>
+              <input type="text" id="customYtInput" placeholder="ตัวอย่าง: gCYcTST8sVY" />
+              <button id="applyYtBtn" class="apply-yt-btn">โหลดเพลง</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="instructions">
+          <h3>ปุ่มลัด (Controls)</h3>
+          <p>เลนที่ 1: <strong>D</strong> | เลนที่ 2: <strong>F</strong></p>
+          <p>เลนที่ 3: <strong>J</strong> | เลนที่ 4: <strong>K</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
