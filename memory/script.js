@@ -8,7 +8,6 @@ const emojiThemes = {
 // State variables
 let currentGrid = '4x3';
 let currentTheme = 'space';
-let cards = [];
 let flippedCards = [];
 let moves = 0;
 let matches = 0;
@@ -39,32 +38,32 @@ function playSound(type) {
 
   if (type === 'flip') {
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(330, now);
-    osc.frequency.exponentialRampToValueAtTime(440, now + 0.1);
-    gain.gain.setValueAtTime(0.08, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+    osc.frequency.setValueAtTime(400, now);
+    osc.frequency.exponentialRampToValueAtTime(600, now + 0.08);
+    gain.gain.setValueAtTime(0.06, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
     osc.start(now);
-    osc.stop(now + 0.1);
+    osc.stop(now + 0.08);
   } else if (type === 'match') {
+    // Beautiful double chime
     osc.type = 'triangle';
     osc.frequency.setValueAtTime(523.25, now); // C5
-    osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+    osc.frequency.setValueAtTime(783.99, now + 0.08); // G5
     gain.gain.setValueAtTime(0.12, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
     osc.start(now);
-    osc.stop(now + 0.25);
+    osc.stop(now + 0.3);
   } else if (type === 'mismatch') {
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(220, now);
-    osc.frequency.setValueAtTime(147, now + 0.1);
-    gain.gain.setValueAtTime(0.08, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-    osc.start(now);
-    osc.stop(now + 0.25);
-  } else if (type === 'win') {
     osc.type = 'sine';
-    // Fanfare arpeggio
-    const freqs = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50];
+    osc.frequency.setValueAtTime(220, now);
+    osc.frequency.setValueAtTime(160, now + 0.1);
+    gain.gain.setValueAtTime(0.06, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+    osc.start(now);
+    osc.stop(now + 0.2);
+  } else if (type === 'win') {
+    osc.type = 'triangle';
+    const freqs = [392.00, 523.25, 659.25, 783.99, 1046.50];
     freqs.forEach((freq, idx) => {
       osc.frequency.setValueAtTime(freq, now + idx * 0.07);
     });
@@ -108,27 +107,22 @@ function initGame() {
 }
 
 function setupBoard() {
-  // Clear classes
   gameBoard.className = 'game-board';
   gameBoard.classList.add(`grid-${currentGrid}`);
   gameBoard.innerHTML = '';
 
-  // Get active grid config
   const parts = currentGrid.split('x');
   const cols = parseInt(parts[0], 10);
   const rows = parseInt(parts[1], 10);
   const totalCards = cols * rows;
   totalPairs = totalCards / 2;
 
-  // Gather emojis for theme and slice to fit pairs
   const baseEmojis = emojiThemes[currentTheme];
   const selectedEmojis = baseEmojis.slice(0, totalPairs);
   
-  // Duplicate and shuffle
   let gameDeck = [...selectedEmojis, ...selectedEmojis];
   shuffle(gameDeck);
 
-  // Render cards
   gameDeck.forEach((emoji, index) => {
     const cardEl = document.createElement('div');
     cardEl.classList.add('card');
@@ -137,7 +131,9 @@ function setupBoard() {
 
     cardEl.innerHTML = `
       <div class="card-inner">
-        <div class="card-back">?</div>
+        <div class="card-back">
+          <span class="card-back-symbol">◆</span>
+        </div>
         <div class="card-front">${emoji}</div>
       </div>
     `;
@@ -152,12 +148,10 @@ function handleCardClick(cardEl) {
   if (isProcessing) return;
   if (cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
 
-  // Start timer on first card click
   if (!isTimerRunning) {
     startTimer();
   }
 
-  // Flip card
   cardEl.classList.add('flipped');
   flippedCards.push(cardEl);
   playSound('flip');
@@ -165,7 +159,6 @@ function handleCardClick(cardEl) {
   if (flippedCards.length === 2) {
     moves++;
     movesDisplay.textContent = moves;
-    
     checkMatch();
   }
 }
@@ -175,7 +168,6 @@ function checkMatch() {
   const isMatch = card1.dataset.name === card2.dataset.name;
 
   if (isMatch) {
-    // Match success
     card1.classList.add('matched');
     card2.classList.add('matched');
     playSound('match');
@@ -186,7 +178,6 @@ function checkMatch() {
       handleWin();
     }
   } else {
-    // Mismatch
     isProcessing = true;
     playSound('mismatch');
     
@@ -195,7 +186,7 @@ function checkMatch() {
       card2.classList.remove('flipped');
       flippedCards = [];
       isProcessing = false;
-    }, 1000);
+    }, 850);
   }
 }
 
@@ -212,12 +203,10 @@ function handleWin() {
   isTimerRunning = false;
   playSound('win');
 
-  // Format victory times
   const finalTimeStr = formatTime(timer);
   winTimeDisplay.textContent = finalTimeStr;
   winMovesDisplay.textContent = moves;
 
-  // Score comparison
   const scoreKey = `memory_best_${currentGrid}_${currentTheme}`;
   const bestTime = localStorage.getItem(scoreKey);
   
@@ -232,7 +221,6 @@ function handleWin() {
   updateBestTime();
 }
 
-// Helpers
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -281,5 +269,4 @@ playAgainBtn.addEventListener('click', () => {
   initGame();
 });
 
-// Auto-run on load
 window.addEventListener('DOMContentLoaded', initGame);

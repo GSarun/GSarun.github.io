@@ -9,7 +9,6 @@ const keepPlayingBtn = document.getElementById('keepPlayingBtn');
 
 const gameOverOverlay = document.getElementById('gameOverOverlay');
 const winOverlay = document.getElementById('winOverlay');
-
 const themeBtns = document.querySelectorAll('.theme-btn');
 
 // Game state variables
@@ -44,21 +43,21 @@ function playSound(type) {
   const now = audioCtx.currentTime;
 
   if (type === 'slide') {
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(220, now);
-    osc.frequency.exponentialRampToValueAtTime(147, now + 0.08);
-    gain.gain.setValueAtTime(0.08, now);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(300, now);
+    osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);
+    gain.gain.setValueAtTime(0.06, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
     osc.start(now);
     osc.stop(now + 0.08);
   } else if (type === 'merge') {
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(392, now); // G4
-    osc.frequency.setValueAtTime(587.33, now + 0.07); // D5
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(440, now); // A4
+    osc.frequency.setValueAtTime(659.25, now + 0.06); // E5
     gain.gain.setValueAtTime(0.12, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
     osc.start(now);
-    osc.stop(now + 0.2);
+    osc.stop(now + 0.22);
   } else if (type === 'win') {
     osc.type = 'triangle';
     const chords = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50];
@@ -72,12 +71,30 @@ function playSound(type) {
   } else if (type === 'gameover') {
     osc.type = 'sawtooth';
     osc.frequency.setValueAtTime(196, now);
-    osc.frequency.linearRampToValueAtTime(80, now + 0.6);
+    osc.frequency.linearRampToValueAtTime(70, now + 0.6);
     gain.gain.setValueAtTime(0.18, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
     osc.start(now);
     osc.stop(now + 0.6);
   }
+}
+
+// Floating score popup generator
+function createScorePopup(points, row, col) {
+  const popup = document.createElement('div');
+  popup.className = 'score-popup';
+  popup.textContent = `+${points}`;
+  
+  // Calculate approximate position inside board
+  const board = document.getElementById('gameBoard');
+  const rect = board.getBoundingClientRect();
+  const cellSize = rect.width / 4;
+  
+  popup.style.left = `${col * cellSize + cellSize / 3}px`;
+  popup.style.top = `${row * cellSize + cellSize / 4}px`;
+  
+  tileContainer.appendChild(popup);
+  setTimeout(() => popup.remove(), 600);
 }
 
 // Start Game
@@ -95,7 +112,6 @@ function startNewGame() {
   gameOverOverlay.classList.remove('active');
   winOverlay.classList.remove('active');
 
-  // Spawn initial 2 tiles
   spawnRandomTile();
   spawnRandomTile();
   updateDOM();
@@ -136,7 +152,7 @@ function spawnRandomTile() {
   activeTiles.push(newTile);
 }
 
-// 2048 Move logic
+// Move logic
 function move(direction) {
   if (!isPlaying) return;
 
@@ -163,7 +179,6 @@ function move(direction) {
         let nextR = currR + vector.y;
         let nextC = currC + vector.x;
 
-        // Traverse as far as empty
         while (nextR >= 0 && nextR < 4 && nextC >= 0 && nextC < 4 && !grid[nextR][nextC]) {
           currR = nextR;
           currC = nextC;
@@ -171,7 +186,6 @@ function move(direction) {
           nextC = currC + vector.x;
         }
 
-        // Check if we hit a merge target
         if (nextR >= 0 && nextR < 4 && nextC >= 0 && nextC < 4) {
           const nextTile = grid[nextR][nextC];
           if (nextTile && nextTile.value === tile.value && !mergedGrid[nextR][nextC]) {
@@ -186,6 +200,7 @@ function move(direction) {
 
             score += nextTile.value;
             scoreDisplay.textContent = score;
+            createScorePopup(nextTile.value, nextR, nextC);
 
             if (nextTile.value === 2048 && !hasWon && !keepPlayingAfterWin) {
               hasWon = true;
@@ -198,7 +213,6 @@ function move(direction) {
           }
         }
 
-        // Regular move
         if (currR !== r || currC !== c) {
           grid[r][c] = null;
           grid[currR][currC] = tile;
@@ -213,7 +227,6 @@ function move(direction) {
   if (moved) {
     playSound(mergedThisTurn ? 'merge' : 'slide');
     
-    // Spawn tile after slide completes
     setTimeout(() => {
       spawnRandomTile();
       updateDOM();
@@ -227,7 +240,6 @@ function move(direction) {
 function updateDOM() {
   activeTiles.forEach(tile => {
     if (tile.mergedInto) {
-      // Slide to merge target
       tile.element.style.setProperty('--row', tile.row);
       tile.element.style.setProperty('--col', tile.col);
       tile.element.style.opacity = 0;
@@ -238,38 +250,32 @@ function updateDOM() {
         el.remove();
       }, 120);
     } else {
-      // Regular slide
       tile.element.style.setProperty('--row', tile.row);
       tile.element.style.setProperty('--col', tile.col);
       tile.element.style.zIndex = 10;
 
-      // Update appearance if value changed
       const el = tile.element;
       const val = tile.value;
       const prevVal = parseInt(el.textContent, 10);
       if (val !== prevVal) {
         setTimeout(() => {
           el.textContent = val;
-          // Apply class for new visual level
           el.className = `tile tile-${val} merged`;
         }, 120);
       }
     }
   });
 
-  // Filter list
   activeTiles = activeTiles.filter(tile => !tile.mergedInto);
 }
 
 function checkGameOver() {
-  // Check for empty cells
   for (let r = 0; r < 4; r++) {
     for (let c = 0; c < 4; c++) {
       if (!grid[r][c]) return;
     }
   }
 
-  // Check adjacent matching values
   for (let r = 0; r < 4; r++) {
     for (let c = 0; c < 4; c++) {
       const val = grid[r][c].value;
@@ -278,7 +284,6 @@ function checkGameOver() {
     }
   }
 
-  // If no moves left, game over
   handleGameOver();
 }
 
@@ -301,41 +306,17 @@ function handleGameOver() {
   gameOverOverlay.classList.add('active');
 }
 
-// User keyboards
 window.addEventListener('keydown', (e) => {
   if (!isPlaying) return;
   switch (e.key) {
-    case 'ArrowUp':
-    case 'w':
-    case 'W':
-      e.preventDefault();
-      move('UP');
-      break;
-    case 'ArrowDown':
-    case 's':
-    case 'S':
-      e.preventDefault();
-      move('DOWN');
-      break;
-    case 'ArrowLeft':
-    case 'a':
-    case 'A':
-      e.preventDefault();
-      move('LEFT');
-      break;
-    case 'ArrowRight':
-    case 'd':
-    case 'D':
-      e.preventDefault();
-      move('RIGHT');
-      break;
+    case 'ArrowUp': case 'w': case 'W': e.preventDefault(); move('UP'); break;
+    case 'ArrowDown': case 's': case 'S': e.preventDefault(); move('DOWN'); break;
+    case 'ArrowLeft': case 'a': case 'A': e.preventDefault(); move('LEFT'); break;
+    case 'ArrowRight': case 'd': case 'D': e.preventDefault(); move('RIGHT'); break;
   }
 });
 
-// Mobile Swipe controls
-let startX = 0;
-let startY = 0;
-
+let startX = 0, startY = 0;
 window.addEventListener('touchstart', (e) => {
   startX = e.touches[0].clientX;
   startY = e.touches[0].clientY;
@@ -345,25 +326,20 @@ window.addEventListener('touchend', (e) => {
   if (!isPlaying) return;
   const endX = e.changedTouches[0].clientX;
   const endY = e.changedTouches[0].clientY;
-
   const dx = endX - startX;
   const dy = endY - startY;
-
   const absDx = Math.abs(dx);
   const absDy = Math.abs(dy);
 
   if (Math.max(absDx, absDy) > 40) {
     if (absDx > absDy) {
-      if (dx > 0) move('RIGHT');
-      else move('LEFT');
+      if (dx > 0) move('RIGHT'); else move('LEFT');
     } else {
-      if (dy > 0) move('DOWN');
-      else move('UP');
+      if (dy > 0) move('DOWN'); else move('UP');
     }
   }
 }, { passive: true });
 
-// Settings & Theme Selector
 themeBtns.forEach(btn => {
   btn.addEventListener('click', (e) => {
     themeBtns.forEach(b => b.classList.remove('active'));
@@ -373,7 +349,6 @@ themeBtns.forEach(btn => {
   });
 });
 
-// Buttons triggers
 newGameBtn.addEventListener('click', startNewGame);
 restartBtn.addEventListener('click', startNewGame);
 keepPlayingBtn.addEventListener('click', () => {
@@ -381,6 +356,5 @@ keepPlayingBtn.addEventListener('click', () => {
   winOverlay.classList.remove('active');
 });
 
-// Run default game theme
 document.body.setAttribute('data-game-theme', 'neon');
 startNewGame();

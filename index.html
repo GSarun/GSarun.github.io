@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GSarun Arcade Hub - ศูนย์รวมเกมสุดพรีเมียม</title>
-  <meta name="description" content="แหล่งรวมมินิเกมสุดสนุกและสวยงามบนเบราว์เซอร์ของคุณ ทั้ง Tower Stacker, Memory Match, Neon Snake และ Merge 2048">
+  <meta name="description" content="แหล่งรวม 6 มินิเกมสุดสนุกระดับพรีเมียม เล่นสนุกได้ทันทีบนเบราว์เซอร์ ทั้ง Tower Stacker, Memory Match, Neon Snake, Merge 2048, Space Defender และ Rhythm Beats">
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&family=Orbitron:wght@500;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&family=Orbitron:wght@500;700;800;900&display=swap" rel="stylesheet">
   <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css">
 </head>
@@ -16,17 +16,23 @@
   <!-- Ambient background glow elements -->
   <div class="glow-bg glow-1"></div>
   <div class="glow-bg glow-2"></div>
+  <div class="glow-bg glow-3"></div>
 
   <div class="container">
     <header class="lobby-header">
+      <div class="status-badge">
+        <span class="pulse-dot"></span>
+        <span>6 PREMIUM ARCADE GAMES ONLINE</span>
+      </div>
       <h1 class="title">GSARUN <span class="accent">ARCADE</span></h1>
-      <p class="subtitle">ศูนย์รวมเกมสุดพรีเมียม เล่นสนุกได้ทันทีบนเบราว์เซอร์ของคุณ</p>
+      <p class="subtitle">ศูนย์รวมเกมสุดพรีเมียม สัมผัสความมันส์พร้อมงานดีไซน์ระดับไฮเอนด์</p>
     </header>
 
     <main class="games-grid">
       <!-- Game Card 1: Tower Stacker -->
       <div class="game-card" data-game="tower">
         <div class="card-icon-wrapper color-tower">
+          <span class="game-badge badge-tower">TIMING</span>
           <div class="icon-tower-stack">
             <span></span>
             <span></span>
@@ -36,13 +42,17 @@
         <div class="card-content">
           <h2 class="game-title">Tower Stacker</h2>
           <p class="game-desc">กะจังหวะปล่อยบล็อกต่อตึกขึ้นฟ้า ยิ่งสูงตึกยิ่งแคบลงและท้าทายยิ่งขึ้น!</p>
-          <a href="tower/index.html" class="play-btn btn-tower">เล่นเลย</a>
+          <a href="tower/index.html" class="play-btn btn-tower">
+            <span>เล่นเลย</span>
+            <span class="btn-arrow">→</span>
+          </a>
         </div>
       </div>
 
       <!-- Game Card 2: Memory Match -->
       <div class="game-card" data-game="memory">
         <div class="card-icon-wrapper color-memory">
+          <span class="game-badge badge-memory">MEMORY</span>
           <div class="icon-memory-match">
             <span>?</span>
             <span>?</span>
@@ -51,13 +61,17 @@
         <div class="card-content">
           <h2 class="game-title">Memory Match</h2>
           <p class="game-desc">เกมจับคู่การ์ดฝึกสมอง พร้อมดีไซน์ 3D พลิกการ์ด และระดับความยากหลากหลาย</p>
-          <a href="memory/index.html" class="play-btn btn-memory">เล่นเลย</a>
+          <a href="memory/index.html" class="play-btn btn-memory">
+            <span>เล่นเลย</span>
+            <span class="btn-arrow">→</span>
+          </a>
         </div>
       </div>
 
       <!-- Game Card 3: Neon Snake -->
       <div class="game-card" data-game="snake">
         <div class="card-icon-wrapper color-snake">
+          <span class="game-badge badge-snake">CLASSIC</span>
           <div class="icon-neon-snake">
             <span></span>
             <span></span>
@@ -66,25 +80,33 @@
         <div class="card-content">
           <h2 class="game-title">Neon Snake</h2>
           <p class="game-desc">พาเจ้างูเก็บแต้มด้วยแสงนีออนเรืองแสง มีไอเทมเพิ่มพลังและหลบหลีกสิ่งกีดขวาง</p>
-          <a href="snake/index.html" class="play-btn btn-snake">เล่นเลย</a>
+          <a href="snake/index.html" class="play-btn btn-snake">
+            <span>เล่นเลย</span>
+            <span class="btn-arrow">→</span>
+          </a>
         </div>
       </div>
 
       <!-- Game Card 4: Merge 2048 -->
       <div class="game-card" data-game="merge">
         <div class="card-icon-wrapper color-merge">
+          <span class="game-badge badge-merge">PUZZLE</span>
           <div class="icon-merge-puzzle">2048</div>
         </div>
         <div class="card-content">
           <h2 class="game-title">Merge 2048</h2>
           <p class="game-desc">เกมผสมบล็อกตัวเลขสุดคลาสสิก อนิเมชันการเคลื่อนที่และรวมบล็อกที่ไหลลื่น</p>
-          <a href="merge/index.html" class="play-btn btn-merge">เล่นเลย</a>
+          <a href="merge/index.html" class="play-btn btn-merge">
+            <span>เล่นเลย</span>
+            <span class="btn-arrow">→</span>
+          </a>
         </div>
       </div>
 
       <!-- Game Card 5: Space Defender -->
       <div class="game-card" data-game="space">
         <div class="card-icon-wrapper color-space">
+          <span class="game-badge badge-space">ACTION</span>
           <div class="icon-space-defender">
             <span class="ship-wing left"></span>
             <span class="ship-body">▲</span>
@@ -94,13 +116,17 @@
         <div class="card-content">
           <h2 class="game-title">Space Defender</h2>
           <p class="game-desc">ยิงยานเอเลี่ยนสุดเร้าใจ เก็บไอเทมอัปเกรดกระสุน และปะทะบอสประจำด่าน!</p>
-          <a href="space/index.html" class="play-btn btn-space">เล่นเลย</a>
+          <a href="space/index.html" class="play-btn btn-space">
+            <span>เล่นเลย</span>
+            <span class="btn-arrow">→</span>
+          </a>
         </div>
       </div>
 
       <!-- Game Card 6: Rhythm Beats -->
       <div class="game-card" data-game="rhythm">
         <div class="card-icon-wrapper color-rhythm">
+          <span class="game-badge badge-rhythm">RHYTHM</span>
           <div class="icon-rhythm-beats">
             <span></span>
             <span></span>
@@ -111,7 +137,10 @@
         <div class="card-content">
           <h2 class="game-title">Rhythm Beats</h2>
           <p class="game-desc">เคาะจังหวะ 4 เลนสุดมันส์ รองรับเสียงเพลง Synthwave และวิดีโอ YouTube</p>
-          <a href="rhythm/index.html" class="play-btn btn-rhythm">เล่นเลย</a>
+          <a href="rhythm/index.html" class="play-btn btn-rhythm">
+            <span>เล่นเลย</span>
+            <span class="btn-arrow">→</span>
+          </a>
         </div>
       </div>
     </main>

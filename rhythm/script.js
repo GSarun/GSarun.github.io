@@ -31,11 +31,10 @@ const touchButtons = document.querySelectorAll('.lane-touch-btn');
 
 // Lane configs
 const laneCount = 4;
-const laneWidth = canvas.width / laneCount; // 85px
+const laneWidth = canvas.width / laneCount;
 const targetY = 440;
-const noteSpeed = 380; // pixels per second
+const noteSpeed = 390;
 const laneColors = ['#06b6d4', '#ec4899', '#f59e0b', '#10b981'];
-const laneKeys = ['d', 'f', 'j', 'k'];
 const keyLaneMap = {
   'd': 0, 'D': 0, 'ก': 0,
   'f': 1, 'F': 1, 'ด': 1,
@@ -45,7 +44,7 @@ const keyLaneMap = {
 
 // Game state
 let isPlaying = false;
-let currentMode = 'synth'; // 'synth' or 'yt'
+let currentMode = 'synth';
 let currentTrack = 'city';
 let currentYtVideoId = 'gCYcTST8sVY';
 
@@ -53,15 +52,17 @@ let notes = [];
 let score = 0;
 let combo = 0;
 let maxCombo = 0;
-let groove = 100; // 0 to 100%
-
+let groove = 100;
 let stats = { perfect: 0, great: 0, miss: 0 };
-
 let songStartTime = 0;
-let particles = [];
-let lanePressStates = [false, false, false, false];
 
-// YouTube IFrame Player
+let particles = [];
+let ripples = [];
+let visualizerBars = [];
+let lanePressStates = [false, false, false, false];
+let screenShake = 0;
+
+// YouTube Player
 let ytPlayer = null;
 let isYtReady = false;
 
@@ -69,18 +70,13 @@ let isYtReady = false;
 let audioCtx = null;
 let synthInterval = null;
 
-// Initialize YouTube API
+// Init YouTube API
 window.onYouTubeIframeAPIReady = function() {
   ytPlayer = new YT.Player('ytPlayer', {
     height: '140',
     width: '320',
     videoId: currentYtVideoId,
-    playerVars: {
-      'playsinline': 1,
-      'controls': 0,
-      'disablekb': 1,
-      'rel': 0
-    },
+    playerVars: { 'playsinline': 1, 'controls': 0, 'disablekb': 1, 'rel': 0 },
     events: {
       'onReady': () => { isYtReady = true; },
       'onStateChange': onYtStateChange
@@ -98,10 +94,7 @@ function loadYouTubeAPI() {
 loadYouTubeAPI();
 
 function onYtStateChange(event) {
-  // If video ends, show results
-  if (event.data === YT.PlayerState.ENDED) {
-    endGame(true);
-  }
+  if (event.data === YT.PlayerState.ENDED) endGame(true);
 }
 
 // Audio synthesis
@@ -112,7 +105,7 @@ function initAudio() {
   if (audioCtx.state === 'suspended') audioCtx.resume();
 }
 
-function playSynthNote(freq, type = 'sine', duration = 0.15, gainVal = 0.1) {
+function playSynthNote(freq, type = 'sine', duration = 0.18, gainVal = 0.1) {
   if (!audioCtx) return;
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
@@ -136,20 +129,20 @@ function playDrumSound(type) {
     const gain = audioCtx.createGain();
     osc.connect(gain);
     gain.connect(audioCtx.destination);
-    osc.frequency.setValueAtTime(150, now);
-    osc.frequency.exponentialRampToValueAtTime(30, now + 0.12);
-    gain.gain.setValueAtTime(0.3, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+    osc.frequency.setValueAtTime(160, now);
+    osc.frequency.exponentialRampToValueAtTime(30, now + 0.14);
+    gain.gain.setValueAtTime(0.35, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
     osc.start(now);
-    osc.stop(now + 0.12);
+    osc.stop(now + 0.14);
   } else if (type === 'snare') {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.connect(gain);
     gain.connect(audioCtx.destination);
     osc.type = 'triangle';
-    osc.frequency.setValueAtTime(220, now);
-    gain.gain.setValueAtTime(0.15, now);
+    osc.frequency.setValueAtTime(240, now);
+    gain.gain.setValueAtTime(0.18, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
     osc.start(now);
     osc.stop(now + 0.1);
@@ -159,15 +152,14 @@ function playDrumSound(type) {
 // Generate Note Charts
 function generateChart() {
   notes = [];
-  const duration = currentMode === 'yt' ? 90 : 45; // seconds
+  const duration = currentMode === 'yt' ? 90 : 45;
   const bpm = currentTrack === 'city' ? 120 : currentTrack === 'highway' ? 135 : 150;
-  const beatInterval = 60 / bpm; // seconds per beat
+  const beatInterval = 60 / bpm;
 
-  let t = 2.0; // start after 2 seconds
+  let t = 2.0;
   const leadFreqs = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25];
 
   while (t < duration) {
-    // 1-2 notes per beat or sub-beat
     const lane1 = Math.floor(Math.random() * laneCount);
     notes.push({
       lane: lane1,
@@ -177,7 +169,7 @@ function generateChart() {
       freq: leadFreqs[Math.floor(Math.random() * leadFreqs.length)]
     });
 
-    if (Math.random() < 0.25) {
+    if (Math.random() < 0.28) {
       let lane2 = (lane1 + 1 + Math.floor(Math.random() * 2)) % laneCount;
       notes.push({
         lane: lane2,
@@ -188,10 +180,9 @@ function generateChart() {
       });
     }
 
-    t += (Math.random() < 0.3 ? beatInterval / 2 : beatInterval);
+    t += (Math.random() < 0.35 ? beatInterval / 2 : beatInterval);
   }
 
-  // Sort notes by hitTime
   notes.sort((a, b) => a.hitTime - b.hitTime);
 }
 
@@ -204,10 +195,15 @@ function startGame() {
   groove = 100;
   stats = { perfect: 0, great: 0, miss: 0 };
   particles = [];
+  ripples = [];
+  screenShake = 0;
 
   scoreDisplay.textContent = score;
   comboDisplay.textContent = combo;
   gaugeFill.style.width = '100%';
+
+  // Init visualizer bars
+  visualizerBars = Array(8).fill(0);
 
   generateChart();
 
@@ -227,13 +223,13 @@ function startGame() {
   requestAnimationFrame(gameLoop);
 }
 
-// Synthwave procedural music player
+// Synthwave procedural music
 let synthStep = 0;
 function startSynthMusic() {
   clearInterval(synthInterval);
   synthStep = 0;
   const bpm = currentTrack === 'city' ? 120 : currentTrack === 'highway' ? 135 : 150;
-  const intervalMs = (60 / bpm / 2) * 1000; // 8th notes
+  const intervalMs = (60 / bpm / 2) * 1000;
 
   const bassScale = [110, 110, 130.81, 146.83, 98, 98, 110, 123.47];
 
@@ -243,11 +239,17 @@ function startSynthMusic() {
       return;
     }
 
-    // Drums
-    if (synthStep % 4 === 0) playDrumSound('kick');
-    if (synthStep % 4 === 2) playDrumSound('snare');
+    if (synthStep % 4 === 0) {
+      playDrumSound('kick');
+      visualizerBars[0] = 30;
+      visualizerBars[1] = 22;
+    }
+    if (synthStep % 4 === 2) {
+      playDrumSound('snare');
+      visualizerBars[6] = 25;
+      visualizerBars[7] = 28;
+    }
 
-    // Bassline
     const bassFreq = bassScale[Math.floor(synthStep / 2) % bassScale.length];
     playSynthNote(bassFreq, 'sawtooth', 0.12, 0.08);
 
@@ -255,16 +257,13 @@ function startSynthMusic() {
   }, intervalMs);
 }
 
-// Floating judgment animation
 function showJudgment(type) {
   judgmentText.textContent = type.toUpperCase() + (type === 'perfect' ? '!' : '');
   judgmentText.className = `judgment-text ${type} pop`;
-  setTimeout(() => {
-    judgmentText.classList.remove('pop');
-  }, 350);
+  setTimeout(() => { judgmentText.classList.remove('pop'); }, 350);
 }
 
-// Trigger Note Hit
+// Hit Note
 function hitLane(lane) {
   if (!isPlaying) return;
   initAudio();
@@ -273,8 +272,6 @@ function hitLane(lane) {
   setTimeout(() => { lanePressStates[lane] = false; }, 100);
 
   const currentTime = Date.now() - songStartTime;
-
-  // Find closest unhit note in lane
   let candidate = null;
   let minDiff = Infinity;
 
@@ -288,41 +285,49 @@ function hitLane(lane) {
     }
   }
 
+  const lx = lane * laneWidth + laneWidth / 2;
+
   if (candidate) {
     candidate.hit = true;
 
-    // Trigger hit sound
     if (currentMode === 'synth') {
-      playSynthNote(candidate.freq, 'sine', 0.2, 0.15);
+      playSynthNote(candidate.freq, 'sine', 0.22, 0.15);
     } else {
       playSynthNote(523.25, 'triangle', 0.1, 0.08);
     }
 
-    createHitParticles(lane * laneWidth + laneWidth / 2, targetY, laneColors[lane]);
+    createHitParticles(lx, targetY, laneColors[lane]);
+
+    // Radial shockwave
+    ripples.push({
+      x: lx,
+      y: targetY,
+      radius: 8,
+      maxRadius: 45,
+      color: laneColors[lane],
+      alpha: 1
+    });
 
     if (minDiff <= 55) {
-      // Perfect
       stats.perfect++;
       score += 100 + combo * 2;
       combo++;
       groove = Math.min(100, groove + 4);
+      screenShake = 3;
       showJudgment('perfect');
     } else if (minDiff <= 110) {
-      // Great
       stats.great++;
       score += 70 + combo;
       combo++;
       groove = Math.min(100, groove + 2);
       showJudgment('great');
     } else {
-      // Good
       score += 40;
       combo++;
       groove = Math.min(100, groove + 1);
       showJudgment('good');
     }
   } else {
-    // Empty strike
     showJudgment('miss');
     combo = 0;
     groove = Math.max(0, groove - 4);
@@ -333,16 +338,13 @@ function hitLane(lane) {
   comboDisplay.textContent = combo;
   gaugeFill.style.width = groove + '%';
 
-  if (groove <= 0) {
-    endGame(false);
-  }
+  if (groove <= 0) endGame(false);
 }
 
-// Particle system
 function createHitParticles(x, y, color) {
-  for (let i = 0; i < 14; i++) {
+  for (let i = 0; i < 16; i++) {
     const angle = Math.random() * Math.PI * 2;
-    const speed = Math.random() * 5 + 2;
+    const speed = Math.random() * 5 + 2.5;
     particles.push({
       x: x,
       y: y,
@@ -382,54 +384,85 @@ function update() {
         gaugeFill.style.width = groove + '%';
         showJudgment('miss');
 
-        if (groove <= 0) {
-          endGame(false);
-        }
+        if (groove <= 0) endGame(false);
       }
     }
   });
 
-  // End song when notes finish
   if (!activeRemaining && notes.length > 0 && currentTime > notes[notes.length - 1].hitTime + 1500) {
     endGame(true);
   }
 
-  // Update particles
+  // Update Particles
   for (let i = particles.length - 1; i >= 0; i--) {
     let p = particles[i];
-    p.x += p.vx;
-    p.y += p.vy;
+    p.x += p.vx; p.y += p.vy;
     p.alpha -= p.decay;
     if (p.alpha <= 0) particles.splice(i, 1);
   }
+
+  // Update Ripples
+  for (let i = ripples.length - 1; i >= 0; i--) {
+    let r = ripples[i];
+    r.radius += 4;
+    r.alpha -= 0.05;
+    if (r.alpha <= 0 || r.radius >= r.maxRadius) ripples.splice(i, 1);
+  }
+
+  // Decay visualizer bars
+  for (let i = 0; i < visualizerBars.length; i++) {
+    visualizerBars[i] *= 0.88;
+  }
+
+  // Decay shake
+  if (screenShake > 0) screenShake *= 0.85;
+  if (screenShake < 0.2) screenShake = 0;
 }
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Draw 4 Lanes
+  ctx.save();
+  if (screenShake > 0) {
+    ctx.translate((Math.random() - 0.5) * screenShake, (Math.random() - 0.5) * screenShake);
+  }
+
+  // Draw 4 Highway Lanes with Perspective depth
   for (let i = 0; i < laneCount; i++) {
     const lx = i * laneWidth;
     
-    // Lane background tint if pressed
+    // Lane press glow
     if (lanePressStates[i]) {
-      ctx.fillStyle = `rgba(${i === 0 ? '6,182,212' : i === 1 ? '236,72,153' : i === 2 ? '245,158,11' : '16,185,129'}, 0.25)`;
+      const grad = ctx.createLinearGradient(lx, 0, lx, canvas.height);
+      grad.addColorStop(0, 'transparent');
+      grad.addColorStop(1, laneColors[i]);
+      ctx.fillStyle = grad;
+      ctx.globalAlpha = 0.3;
       ctx.fillRect(lx, 0, laneWidth, canvas.height);
+      ctx.globalAlpha = 1;
     }
 
-    // Lane border dividers
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+    // Divider line
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(lx, 0);
-    ctx.lineTo(lx, canvas.height);
+    ctx.moveTo(lx, 0); ctx.lineTo(lx, canvas.height);
     ctx.stroke();
   }
 
-  // Draw Hit Target Line
+  // Visualizer bars at edges
+  ctx.fillStyle = 'rgba(168, 85, 247, 0.3)';
+  for (let i = 0; i < 4; i++) {
+    const h = visualizerBars[i] || 0;
+    ctx.fillRect(4, targetY - h * 2, 4, h * 2);
+    const h2 = visualizerBars[i + 4] || 0;
+    ctx.fillRect(canvas.width - 8, targetY - h2 * 2, 4, h2 * 2);
+  }
+
+  // Target Hit Line
   ctx.save();
   ctx.strokeStyle = '#a855f7';
-  ctx.shadowBlur = 12;
+  ctx.shadowBlur = 15;
   ctx.shadowColor = '#a855f7';
   ctx.lineWidth = 3;
   ctx.beginPath();
@@ -437,44 +470,72 @@ function draw() {
   ctx.lineTo(canvas.width, targetY);
   ctx.stroke();
 
-  // Target lane indicators
+  // Target pill slots
   for (let i = 0; i < laneCount; i++) {
     ctx.fillStyle = laneColors[i];
     ctx.shadowColor = laneColors[i];
-    ctx.fillRect(i * laneWidth + 8, targetY - 6, laneWidth - 16, 12);
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.roundRect(i * laneWidth + 10, targetY - 7, laneWidth - 20, 14, 6);
+    ctx.fill();
   }
   ctx.restore();
 
-  // Draw Falling Notes
+  // Draw Notes with Light Trails
   const currentTime = Date.now() - songStartTime;
 
   notes.forEach(note => {
     if (!note.hit && !note.missed) {
-      // Calculate Y based on time delta
       const timeDelta = (note.hitTime - currentTime) / 1000;
       const ny = targetY - timeDelta * noteSpeed;
 
-      if (ny > -30 && ny < canvas.height) {
-        const nx = note.lane * laneWidth + 8;
-        const nw = laneWidth - 16;
-        const nh = 14;
+      if (ny > -40 && ny < canvas.height) {
+        const nx = note.lane * laneWidth + 10;
+        const nw = laneWidth - 20;
+        const nh = 16;
 
         ctx.save();
-        ctx.fillStyle = laneColors[note.lane];
-        ctx.shadowBlur = 12;
-        ctx.shadowColor = laneColors[note.lane];
         
-        // Rounded note pill
+        // Trail gradient
+        const trailGrad = ctx.createLinearGradient(nx, ny - 30, nx, ny);
+        trailGrad.addColorStop(0, 'transparent');
+        trailGrad.addColorStop(1, laneColors[note.lane]);
+        ctx.fillStyle = trailGrad;
+        ctx.globalAlpha = 0.35;
+        ctx.fillRect(nx + 4, ny - 30, nw - 8, 30);
+        ctx.globalAlpha = 1;
+
+        // Main Note
+        ctx.fillStyle = laneColors[note.lane];
+        ctx.shadowBlur = 16;
+        ctx.shadowColor = laneColors[note.lane];
         ctx.beginPath();
-        ctx.roundRect(nx, ny - nh / 2, nw, nh, 6);
+        ctx.roundRect(nx, ny - nh / 2, nw, nh, 8);
         ctx.fill();
 
-        // Inner shine
+        // Inner specular highlight
         ctx.fillStyle = '#ffffff';
-        ctx.fillRect(nx + 6, ny - 2, nw - 12, 3);
+        ctx.beginPath();
+        ctx.roundRect(nx + 6, ny - 3, nw - 12, 4, 2);
+        ctx.fill();
+
         ctx.restore();
       }
     }
+  });
+
+  // Draw Ripples
+  ripples.forEach(r => {
+    ctx.save();
+    ctx.strokeStyle = r.color;
+    ctx.lineWidth = 2.5;
+    ctx.globalAlpha = r.alpha;
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = r.color;
+    ctx.beginPath();
+    ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
   });
 
   // Draw Particles
@@ -489,6 +550,8 @@ function draw() {
     ctx.fill();
     ctx.restore();
   });
+
+  ctx.restore();
 }
 
 function endGame(isClear) {
@@ -514,7 +577,7 @@ function endGame(isClear) {
   resultOverlay.classList.add('active');
 }
 
-// Input Handlers
+// Event Listeners
 window.addEventListener('keydown', (e) => {
   if (keyLaneMap[e.key] !== undefined) {
     e.preventDefault();
@@ -522,21 +585,17 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
-// Touch buttons
 touchButtons.forEach(btn => {
   btn.addEventListener('touchstart', (e) => {
     e.preventDefault();
-    const lane = parseInt(btn.dataset.lane, 10);
-    hitLane(lane);
+    hitLane(parseInt(btn.dataset.lane, 10));
   }, { passive: false });
 
   btn.addEventListener('mousedown', () => {
-    const lane = parseInt(btn.dataset.lane, 10);
-    hitLane(lane);
+    hitLane(parseInt(btn.dataset.lane, 10));
   });
 });
 
-// Mode switcher
 modeSynthBtn.addEventListener('click', () => {
   modeSynthBtn.classList.add('active');
   modeYtBtn.classList.remove('active');
@@ -555,7 +614,6 @@ modeYtBtn.addEventListener('click', () => {
   currentMode = 'yt';
 });
 
-// Track selection
 trackButtons.forEach(btn => {
   btn.addEventListener('click', (e) => {
     trackButtons.forEach(b => b.classList.remove('active'));
@@ -564,7 +622,6 @@ trackButtons.forEach(btn => {
   });
 });
 
-// YouTube selection
 ytSongSelect.addEventListener('change', (e) => {
   currentYtVideoId = e.target.value;
   if (ytPlayer && isYtReady) ytPlayer.loadVideoById(currentYtVideoId);
@@ -573,18 +630,13 @@ ytSongSelect.addEventListener('change', (e) => {
 applyYtBtn.addEventListener('click', () => {
   const val = customYtInput.value.trim();
   if (val) {
-    // Extract video ID if URL is pasted
     let videoId = val;
-    if (val.includes('v=')) {
-      videoId = val.split('v=')[1].split('&')[0];
-    } else if (val.includes('youtu.be/')) {
-      videoId = val.split('youtu.be/')[1].split('?')[0];
-    }
+    if (val.includes('v=')) videoId = val.split('v=')[1].split('&')[0];
+    else if (val.includes('youtu.be/')) videoId = val.split('youtu.be/')[1].split('?')[0];
     currentYtVideoId = videoId;
     if (ytPlayer && isYtReady) ytPlayer.loadVideoById(currentYtVideoId);
   }
 });
 
-// Overlays
 startBtn.addEventListener('click', startGame);
 restartBtn.addEventListener('click', startGame);
